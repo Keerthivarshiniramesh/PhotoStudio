@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Contextuse } from '../Providerr';
+import logo from '../assets/ADS_bg_Logo.png'
 export default function Product() {
 
     let { products, setProducts } = useContext(Contextuse)
@@ -34,7 +35,7 @@ export default function Product() {
             setView(one)
             console.log(view)
             setlist(true)
-            setdataView(true)
+
 
         }
         else {
@@ -62,8 +63,7 @@ export default function Product() {
             ...prev,
             availableSizes: [
                 ...prev.availableSizes,
-                { height: heights, width: widths }, // New size object
-            ],
+                { height: heights, width: widths },],
         }));
 
     }
@@ -139,11 +139,12 @@ export default function Product() {
     }
     return (
         <div>
-            <header className='container-fluid text-center bg-white home'>
-                <h3 className='m-5 text-white'>ASATHAL DIGITAL STUDIO </h3>
+            <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center'>
+                <img src={logo} style={{ with: '50px', height: '50px' }} className='d-inline-block mt-5 pt-2' />
+                <h3 className='mt-5  mb-5 text-white'>ASATHAL DIGITAL STUDIO </h3>
             </header>
 
-            <button className='btn btn-primary m-5 float-end' onClick={() => setCancel(true)} >Create Products</button>
+            <button className='btn btn-primary m-5 float-end create' onClick={() => setCancel(true)} >Create Products</button>
 
             <table className="table caption-top position-relative">
                 <caption>List of Products</caption>
@@ -169,7 +170,7 @@ export default function Product() {
                                 <td><img src={pro.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
                                 <td><img src={pro.framePhoto} style={{ width: "50px", height: "50px" }} /></td>
                                 <td>{pro.availableSizes.length}</td>
-                                <td><i class="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
+                                <td><i className="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
                                 <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
                             </tr>
 
@@ -189,36 +190,36 @@ export default function Product() {
                     <div>
                         <form className=''>
                             <div className="mb-3">
-                                <label> Name : </label>
+                                <label><h6>Name:</h6></label>
                                 <input type='text' className='form-control' value={create.name} onChange={(e) => Store(e, "name")} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label"> CoverPhoto : </label>
+                                <label className="form-label"><h6>CoverPhoto :</h6></label>
                                 <input type='file' className='form-control' onChange={(e) => Store(e, "coverPhoto")} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label">FramePhoto</label>
+                                <label className="form-label"><h6>FramePhoto :</h6></label>
                                 <input type="file" className="form-control" onChange={(e) => Store(e, "framePhoto")} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label">AvailableSize : </label>
+                                <label className="form-label"><h6>AvailableSize:</h6> </label>
                                 <input type="text" className="form-control mb-1" ref={heightRef} placeholder='Height' />
                                 <input type="text" className="form-control mb-1" ref={widthRef} placeholder='Width' />
                                 <button className="btn btn-primary m-2" onClick={() => Add()}>Add</button>
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label " >Stock: </label>
+                                <label className="form-label " ><h6>Stock:</h6></label>
                                 <input type="radio" name='stock' className='ms-4' value='Available' />Available
                                 <input type="radio" name='stock' className='ms-4' value='Out of Stock' />Out of Stock
                             </div>
 
                             <div className="mb-3">
-                                <button className="btn btn-primary float-start" onClick={() => setCancel(false)}>Cancel</button>
-                                <button className="btn btn-primary float-end" onClick={(e) => Save(e)}>Save</button>
+                                <button className="btn btn-primary float-start create" onClick={() => setCancel(false)}>Cancel</button>
+                                <button className="btn btn-primary float-end create" onClick={(e) => Save(e)}>Save</button>
                             </div>
 
                         </form>
@@ -235,7 +236,7 @@ export default function Product() {
                     <div>
                         <form className=''>
                             <div className="mb-3">
-                                <label> Name : </label>
+                                <label><h6>Name:</h6></label>
                                 <input type='text' className='form-control' value={view.name || ''}
                                     onChange={(e) => setView({ ...view, name: e.target.value })} />
                             </div>
@@ -251,7 +252,7 @@ export default function Product() {
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label">AvailableSize : </label>
+                                <label className="form-label"><h6>AvailableSize:</h6> </label>
                                 {
                                     view.availableSizes.map((size, index) =>
                                     (
@@ -269,15 +270,15 @@ export default function Product() {
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label " >Stock: </label>
+                                <label className="form-label " ><h6>Stock:</h6></label>
                                 <input type="radio" name='stock' className='ms-4' value='Available' checked={view.stock === 'Available'} onChange={() => setView((prevState) => ({ ...prevState, stock: "Available" }))} />Available
                                 <input type="radio" name='stock' className='ms-4' value='Out of Stock' checked={view.stock === 'Out of Stock'} onChange={() => setView((prevState) => ({ ...prevState, stock: "Out of Stock" }))} />Out of Stock
                             </div>
 
 
                             <div className="mb-3">
-                                <button className="btn btn-primary float-start" onClick={() => setlist(false)}>Cancel</button>
-                                <button className="btn btn-primary float-end" onClick={(e) => Edit(e)} >Save</button>
+                                <button className="btn btn-primary float-start create" onClick={() => setlist(false)}>Cancel</button>
+                                <button className="btn btn-primary float-end create" onClick={(e) => Edit(e)} >Save</button>
                             </div>
 
                         </form>
@@ -290,27 +291,27 @@ export default function Product() {
                 dataview &&
 
                 <div className='popup border rounded position-absolute'>
-                    <h3 className='text-center'>Products</h3>
-                    <div className='d-flex justify-content-end  fs-3 fw-bold close' onClick={() => setlist(false)}>&times;</div>
+                    <h3 className='text-center '>Products</h3>
+                    <div className='d-flex justify-content-end  fs-3 fw-bold close' onClick={() => setdataView(false)}>&times;</div>
                     <div>
 
                         <div className="mb-3">
-                            <label> Name : </label>
-                            {view.name}
+                            <label className='fw-bold '> Name : </label>
+                            <p className='ps-3 d-inline-block'>{view.name}</p>
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">CoverPhoto :</label><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px' }} />
+                            <label className="form-label fw-bold">CoverPhoto :</label><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
 
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">CoverPhoto :</label><img src={view.framePhoto} alt='FramePhoto' style={{ width: '100px', height: '100px' }} />
+                            <label className="form-label fw-bold">CoverPhoto :</label><img src={view.framePhoto} alt='FramePhoto' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
 
                         </div>
 
                         <div className="mb-3 ">
-                            <label className="form-label">AvailableSize : </label>
+                            <label className="form-label fw-bold ">AvailableSize : </label>
                             <div className=' d-flex flex-wrap flex-row '>
                                 {
                                     view.availableSizes.map((size, index) =>
@@ -325,20 +326,19 @@ export default function Product() {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label " >Stock: </label>
-                            {view.stock}
+                            <label className="form-label fw-bold" >Stock: </label>
+                            <p className='ps-3 d-inline-block'>{view.stock}</p>
                         </div>
 
 
                         <div className="mb-3">
-                            <button className="btn btn-primary float-start" onClick={() => setdataView(false)}>Cancel</button>
+                            <button className="btn btn-primary text-center create" onClick={() => setdataView(false)}>Cancel</button>
 
                         </div>
 
                     </div>
                 </div>
             }
-
 
         </div >
     )
