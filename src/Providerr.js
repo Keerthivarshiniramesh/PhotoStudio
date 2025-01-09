@@ -4,12 +4,14 @@ import Cover1 from './assets/coverimage1.png'
 import Barque from './assets/baroque.jpg'
 import photo from './assets/photo.png'
 import video from './assets/video.png'
+import Cover2 from './assets/coverimage2.jpg'
+import Metallic from './assets/metallicframe.jpg'
 
 export const Contextuse = createContext()
 
 export default function Providerr(props) {
 
-    // let [isadmin, setAdmin] = useState(null)
+    let [isadmin, setAdmin] = useState(true)
 
     let admins = [{
         email: 'demo12@gmail.com',
@@ -35,7 +37,7 @@ export default function Providerr(props) {
     let [products, setProducts] = useState([
         {
             id: 1,
-            name: "Classic Wooden Frame",
+            name: "Baroque  Frame",
             coverPhoto: Cover1,
             framePhoto: Barque,
             availableSizes: [
@@ -49,14 +51,66 @@ export default function Providerr(props) {
         {
             id: 2,
             name: "Modern Metallic Frame",
-            coverPhoto: "modern_metallic_frame_cover.png",
-            framePhoto: "modern_metallic_frame_border.png",
+            coverPhoto: Cover2,
+            framePhoto: Metallic,
             availableSizes: [
                 { height: 5, width: 7 },
                 { height: 8, width: 10 },
                 { height: 11, width: 14 }
             ],
             stock: 'Available'
+
+        },
+        {
+            id: 3,
+            name: "Baroque  Frame",
+            coverPhoto: Cover1,
+            framePhoto: Barque,
+            availableSizes: [
+                { height: 4, width: 6 },
+                { height: 5, width: 7 },
+                { height: 8, width: 10 }
+            ],
+            stock: 'Available'
+
+        },
+        {
+            id: 4,
+            name: "Modern Metallic Frame",
+            coverPhoto: Cover2,
+            framePhoto: Metallic,
+            availableSizes: [
+                { height: 5, width: 7 },
+                { height: 8, width: 10 },
+                { height: 11, width: 14 }
+            ],
+            stock: 'Available'
+
+        },
+        {
+            id: 5,
+            name: "Baroque  Frame",
+            coverPhoto: Cover1,
+            framePhoto: Barque,
+            availableSizes: [
+                { height: 4, width: 6 },
+                { height: 5, width: 7 },
+                { height: 8, width: 10 }
+            ],
+            stock: 'Available'
+
+        },
+        {
+            id: 6,
+            name: "Modern Metallic Frame",
+            coverPhoto: Cover2,
+            framePhoto: Metallic,
+            availableSizes: [
+                { height: 5, width: 7 },
+                { height: 8, width: 10 },
+                { height: 11, width: 14 }
+            ],
+            stock: 'Out of Stock'
 
         }
     ])
@@ -138,7 +192,7 @@ export default function Providerr(props) {
 
 
 
-    let data = { admins, products, setProducts, services, setServices, orders, setOrder, bookings, setBookings }
+    let data = { isadmin, admins, products, setProducts, services, setServices, orders, setOrder, bookings, setBookings }
     return (
         <Contextuse.Provider value={data}>
             {props.children}

@@ -127,7 +127,7 @@ export default function Service() {
                         <th scope="col">S.No</th>
                         <th scope="col">Name</th>
                         <th scope="col">CoverPhoto</th>
-                        <th scope="col">Price</th>
+                        <th scope="col" className="d-none d-md-table-cell">Price</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -140,7 +140,7 @@ export default function Service() {
                                 <th>{ser.id}</th>
                                 <td>{ser.name}</td>
                                 <td><img src={ser.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
-                                <td>{ser.price}</td>
+                                <td className="d-none d-md-table-cell">{ser.price}</td>
                                 <td><i className="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
                                 <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
                             </tr>
@@ -182,7 +182,7 @@ export default function Service() {
                             </div>
 
 
-                            <div className="mb-3">
+                            <div className="mb-3 buttons">
                                 <button className="btn btn-primary float-start create" onClick={() => setCancel(false)}>Cancel</button>
                                 <button className="btn btn-primary float-end create" onClick={(e) => Save(e)}>Save</button>
                             </div>
@@ -224,7 +224,7 @@ export default function Service() {
                             </div>
 
 
-                            <div className="mb-3">
+                            <div className="mb-3 buttons">
                                 <button className="btn btn-primary float-start create" onClick={() => setlist(false)}>Cancel</button>
                                 <button className="btn btn-primary float-end create" onClick={(e) => Edit(e)} >Save</button>
                             </div>

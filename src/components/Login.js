@@ -7,7 +7,7 @@ export default function Login() {
     let [valid, setValid] = useState({ email: '', pwd: '' })
     let [check, setCheck] = useState(false)
 
-    let { admins } = useContext(Contextuse)
+    let { admins, setAdmin } = useContext(Contextuse)
     console.log(admins)
 
     let use = useNavigate()
@@ -50,6 +50,7 @@ export default function Login() {
             console.log(set)
             if (set) {
                 setCheck(false)
+                setAdmin(false)
                 use('/home')
             }
             else {

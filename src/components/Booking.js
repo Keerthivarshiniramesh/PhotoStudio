@@ -41,22 +41,13 @@ export default function Bookings() {
 
     let Save = (e) => {
         e.preventDefault()
-        let id;
-        if (bookings.length === 0) {
-            id = 1
-        }
-        else {
-            let lastPro = bookings.slice(-1)
-            id = lastPro[0].id + 1
-        }
 
         if (status !== '') {
 
             form.append('status', status)
+            console.log(status)
         }
-        else {
 
-        }
     }
 
     return (
@@ -71,10 +62,10 @@ export default function Bookings() {
                 <thead className='table-light'>
                     <tr>
                         <th scope="col">S.No</th>
-                        <th scope="col">Service.Id</th>
-                        <th scope="col">Email</th>
+                        <th scope="col" className="d-none d-md-table-cell">Service.Id</th>
+                        <th scope="col" className="d-none d-md-table-cell">Email</th>
                         <th scope="col">Customer Name</th>
-                        <th scope="col">Contact</th>
+                        <th scope="col" className="d-none d-md-table-cell">Contact</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -85,10 +76,10 @@ export default function Bookings() {
                         (
                             <tr key={index}>
                                 <th>{book.id}</th>
-                                <td>{book.serviceId}</td>
-                                <td>{book.email}</td>
+                                <td className="d-none d-md-table-cell">{book.serviceId}</td>
+                                <td className="d-none d-md-table-cell">{book.email}</td>
                                 <td>{book.customerName}</td>
-                                <td>{book.contact}</td>
+                                <td className="d-none d-md-table-cell">{book.contact}</td>
                                 <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
                             </tr>
                         ))
@@ -145,14 +136,14 @@ export default function Bookings() {
                     <div className="mb-3">
                         <label className="form-label fw-bold" >Status: </label>
                         <select value={status} onChange={(e) => setStatus(e.target.value)} className='ms-3'>
-                            <option value="Pending" >Accept</option>
+                            <option value="Accept" >Accept</option>
                             <option value="Processed" >Processed</option>
-                            <option value="Delivered">Reject</option>
+                            <option value="Reject">Reject</option>
 
                         </select>
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-3  buttons">
                         <button className="btn btn-primary text-center create" onClick={() => setdataView(false)}>Cancel</button>
                         <button className="btn btn-primary float-end create" onClick={(e) => Save(e)} >Save</button>
                     </div>

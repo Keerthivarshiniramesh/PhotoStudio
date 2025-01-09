@@ -45,18 +45,10 @@ export default function Order() {
 
     let Save = (e) => {
         e.preventDefault()
-        let id;
-        if (orders.length === 0) {
-            id = 1
-        }
-        else {
-            let lastPro = orders.slice(-1)
-            id = lastPro[0].id + 1
-        }
-
         if (status !== '') {
 
             form.append('status', status)
+            console.log(status)
         }
         else {
 
@@ -75,10 +67,10 @@ export default function Order() {
                 <thead className='table-light'>
                     <tr>
                         <th scope="col">S.No</th>
-                        <th scope="col">Order.Id</th>
+                        <th scope="col" className="d-none d-md-table-cell">Order.Id</th>
                         <th scope="col">Date</th>
                         <th scope="col">Customer Name</th>
-                        <th scope="col">Contact</th>
+                        <th scope="col" className="d-none d-md-table-cell">Contact</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -88,11 +80,11 @@ export default function Order() {
                         orders && orders.map((order, index) =>
                         (
                             <tr key={index}>
-                                <th>{order.id}</th>
+                                <th className="d-none d-md-table-cell">{order.id}</th>
                                 <td>{order.productId}</td>
                                 <td>{order.date}</td>
                                 <td>{order.customerName}</td>
-                                <td>{order.contact}</td>
+                                <td className="d-none d-md-table-cell">{order.contact}</td>
                                 <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
                             </tr>
                         ))
@@ -166,7 +158,7 @@ export default function Order() {
                         </select>
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-3 buttons">
                         <button className="btn btn-primary text-center create" onClick={() => setdataView(false)}>Cancel</button>
                         <button className="btn btn-primary float-end create" onClick={(e) => Save(e)} >Save</button>
                     </div>

@@ -153,9 +153,9 @@ export default function Product() {
                     <tr>
                         <th scope="col">S.No</th>
                         <th scope="col">Name</th>
-                        <th scope="col">CoverPhoto</th>
-                        <th scope="col">FramePhoto</th>
-                        <th scope="col">AvailableSize</th>
+                        <th scope="col" className="d-none d-md-table-cell">CoverPhoto</th>
+                        <th scope="col" className="d-none d-md-table-cell">FramePhoto</th>
+                        <th scope="col" className="d-none d-md-table-cell">AvailableSize</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -167,9 +167,9 @@ export default function Product() {
                             <tr key={index}>
                                 <th>{pro.id}</th>
                                 <td>{pro.name}</td>
-                                <td><img src={pro.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
-                                <td><img src={pro.framePhoto} style={{ width: "50px", height: "50px" }} /></td>
-                                <td>{pro.availableSizes.length}</td>
+                                <td className="d-none d-md-table-cell"><img src={pro.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
+                                <td className="d-none d-md-table-cell"><img src={pro.framePhoto} style={{ width: "50px", height: "50px" }} /></td>
+                                <td className="d-none d-md-table-cell">{pro.availableSizes.length}</td>
                                 <td><i className="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
                                 <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
                             </tr>
@@ -217,7 +217,7 @@ export default function Product() {
                                 <input type="radio" name='stock' className='ms-4' value='Out of Stock' />Out of Stock
                             </div>
 
-                            <div className="mb-3">
+                            <div className="mb-3 buttons">
                                 <button className="btn btn-primary float-start create" onClick={() => setCancel(false)}>Cancel</button>
                                 <button className="btn btn-primary float-end create" onClick={(e) => Save(e)}>Save</button>
                             </div>
@@ -276,7 +276,7 @@ export default function Product() {
                             </div>
 
 
-                            <div className="mb-3">
+                            <div className="mb-3 buttons">
                                 <button className="btn btn-primary float-start create" onClick={() => setlist(false)}>Cancel</button>
                                 <button className="btn btn-primary float-end create" onClick={(e) => Edit(e)} >Save</button>
                             </div>

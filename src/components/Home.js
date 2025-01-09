@@ -7,7 +7,7 @@ import logo from '../assets/ADS_bg_Logo.png'
 export default function Home() {
 
     useEffect(() => {
-        <p>Loading...</p>
+       
     }, [])
     return (
         <div className=''>
