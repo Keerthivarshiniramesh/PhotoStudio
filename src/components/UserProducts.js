@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import logo from '../assets/ADS_bg_Logo.png'
 import { Contextuse } from '../Providerr'
+import { useNavigate } from 'react-router-dom'
 
 export default function UserProducts() {
 
     let { products } = useContext(Contextuse)
+    let use = useNavigate()
 
     return (
         <div className='user_bg'>
@@ -34,7 +36,8 @@ export default function UserProducts() {
                         <div className="card-body">
                             <h5 className="card-title text-primary">{product.name}</h5>
                             <p className="card-text">{product.stock}</p>
-                            <a href="/order" className="btn rounded border view"> View ...</a>
+                            {/* <a href="/order" className="btn rounded border view"> View ...</a> */}
+                            <button className="btn rounded border mt-3 view" onClick={() => use(`/userproduct/${product.name}`)}>Frame Detail...</button>
                         </div>
                     </div>
                 ))}

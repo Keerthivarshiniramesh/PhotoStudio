@@ -123,7 +123,7 @@ export default function Order() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label fw-bold">Photo :</label><img src={view.photo} alt='Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
+                        <label className="form-label fw-bold">Photo :</label><img src={view.photo} alt='Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} download />
 
                     </div>
 

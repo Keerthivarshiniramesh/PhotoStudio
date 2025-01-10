@@ -71,32 +71,17 @@ export default function Login() {
                 <div className="container form1 mx-auto p-4" style={{ maxWidth: '400px' }}>
                     <h3 className="p-3 text-primary">Login</h3>
                     <form>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="form-control p-3 mb-3"
-                            value={valid.email}
-                            onChange={(e) => Validation(e, "email", emailReg)}
+                        <input type="email" placeholder="Email" className="form-control p-3 mb-3" value={valid.email} onChange={(e) => Validation(e, "email", emailReg)}
                         />
 
-                        <input
-                            type="text"
-                            placeholder="Password"
-                            className="form-control p-3 mb-3"
-                            value={valid.pwd}
-                            onChange={(e) => Validation(e, "pwd", passReg)}
+                        <input type="text" placeholder="Password" className="form-control p-3 mb-3" value={valid.pwd} onChange={(e) => Validation(e, "pwd", passReg)}
                         />
 
                         {check && (
                             <p className="text-danger">*Enter the valid email or Password</p>
                         )}
 
-                        <button
-                            className="btn btn-primary mt-4 w-100"
-                            onClick={(e) => Submits(e)}
-                        >
-                            Login
-                        </button>
+                        <button className="btn btn-primary mt-4 w-100" onClick={(e) => Submits(e)}> Login</button>
                     </form>
                 </div>
             </main>

@@ -40,7 +40,7 @@ function App() {
       <Route path='/' element={<HomePage />}></Route>
       <Route path='/userservice' element={<UserService />}></Route>
       <Route path='/userproduct' element={<UserProducts />}></Route>
-      <Route path='/frames' element={<Frames />} />
+      <Route path='/userproduct/:name' element={<Frames />} />
       <Route path='/userservice/:name' element={<Event />} />
     </Routes>
   );

@@ -62,6 +62,9 @@ export default function HomePage() {
                 <p className="text-center thin">About Services</p>
 
                 <div className="row align-items-center">
+                    <div className="col-12 col-md-6 text-center">
+                        <img src={home_service} className="img-fluid" alt="Services" />
+                    </div>
                     <div className="col-12 col-md-6 text-center mt-4">
                         <p className="content">
                             With expertise in both photography and videography, we create
@@ -69,9 +72,7 @@ export default function HomePage() {
                         </p>
                         <button className="btn rounded border mt-3 view" onClick={() => use('/userservice')}> View Services..</button>
                     </div>
-                    <div className="col-12 col-md-6 text-center">
-                        <img src={home_service} className="img-fluid" alt="Services" />
-                    </div>
+
                 </div>
             </div>
 
