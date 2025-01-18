@@ -27,7 +27,6 @@ export default function Frames() {
         currentDate: new Date().toISOString().split("T")[0],
         quantity: '',
         custonmerSize: size
-
     })
 
     let current = products.find((product) => product.name === name)
