@@ -63,6 +63,6 @@ export default function UserProducts() {
                     </div>
                 </div>
             </footer>
-        </div >
+        </div>
     )
 }

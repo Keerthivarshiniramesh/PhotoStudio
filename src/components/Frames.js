@@ -8,7 +8,7 @@ export default function Frames() {
     let { products, orders } = useContext(Contextuse);
 
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+
     let [upload, setUpload] = useState(false)
     let [photoUrl, setPhotoUrl] = useState('')
 
@@ -31,6 +31,7 @@ export default function Frames() {
     })
 
     let current = products.find((product) => product.name === name)
+    const [currentIndex, setCurrentIndex] = useState(current.id - 1);
 
     useEffect(() => {
         if (current && current.availableSizes.length > 0) {
@@ -75,13 +76,6 @@ export default function Frames() {
         else {
             alert("Upload Your photo !!!😊")
         }
-
-
-
-
-
-
-
 
     }
     // console.log("Image", user_photo)
@@ -164,15 +158,20 @@ export default function Frames() {
                                 onClick={() => handleImageClick(index)} />
                         ))}
                     </div>
-
-
                 </div>
 
 
-
-                <div className='d-flex align-items-center justify-content-end mt-5'>
-                    <input type='file' className='' onChange={(e) => Create(e, 'photo')} ref={photoRef}></input>
-                    <button className="btn rounded border mt-3 view" onClick={() => Add()}>Add Photo</button>
+                <div className="row justify-content-end mt-5">
+                    <div className="col-md-6">
+                        <form>
+                            <div className="mb-3 d-inline-block">
+                                <input type='file' className='sm ' onChange={(e) => Create(e, 'photo')} ref={photoRef}></input>
+                            </div>
+                            <div class="mb-3 d-inline-block">
+                                <button className="btn rounded border mt-3 view" onClick={() => Add()}>Add Photo</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
 
@@ -210,8 +209,6 @@ export default function Frames() {
                             </select>
                         </div>
 
-
-
                         <button className="btn btn-primary mt-4 w-50 " style={{ marginLeft: '80px' }} onClick={(e) => Order(e)}> Order Now </button>
                     </form>
                 </div>
@@ -238,5 +235,5 @@ export default function Frames() {
                 </div>
             </footer>
         </div >
-    );
+    )
 }
