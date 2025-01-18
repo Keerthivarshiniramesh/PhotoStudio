@@ -65,6 +65,7 @@ export default function Frames() {
 
     }
     console.log("url:", photoUrl)
+
     function Add() {
         if (photoRef.current.files[0]) {
 
@@ -140,9 +141,7 @@ export default function Frames() {
 
                     {
                         upload &&
-
                         <img src={photoUrl} className={` uploadPhoto border position-absolute`}  ></img>
-
 
                     }
 
@@ -162,14 +161,12 @@ export default function Frames() {
 
                 <div className="row justify-content-end mt-5">
                     <div className="col-md-6">
-                        <form>
-                            <div className="mb-3 d-inline-block">
-                                <input type='file' className='sm ' onChange={(e) => Create(e, 'photo')} ref={photoRef}></input>
-                            </div>
-                            <div class="mb-3 d-inline-block">
-                                <button className="btn rounded border mt-3 view" onClick={() => Add()}>Add Photo</button>
-                            </div>
-                        </form>
+                        <div className="mb-3 d-inline-block">
+                            <input type='file' className='sm ' onChange={(e) => Create(e, 'photo')} ref={photoRef}></input>
+                        </div>
+                        <div className="mb-3 d-inline-block">
+                            <button className="btn rounded border mt-3 view" onClick={() => Add()}>Add Photo</button>
+                        </div>
                     </div>
                 </div>
 
