@@ -17,12 +17,15 @@ export default function Event() {
 
 
     })
+    let [check, setCheck] = useState(false)
+
 
     let current = services.find((service) => service.name === name)
 
 
     function Create(e, keys) {
         let values = e.target.value
+        setCheck(false)
         setStore(prev => ({
             ...prev,
             [keys]: values
@@ -41,22 +44,30 @@ export default function Event() {
             id = lastPro[0].id + 1
         }
 
-        if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
-            || store.number !== '' || store.startDate !== '' || store.endDate !== '') {
+        if (store.name === '' || store.address === '' || store.email === ''
+            || store.number === '' || store.startDate === '' || store.endDate === '') {
+            setCheck(true)
 
-            form.append("id", id)
-            form.append(" customerName", store.name.trim())
-            form.append("email", store.email.trim())
-            form.append("contact", store.number.trim())
-            form.append("address", store.address.trim())
-            form.append("serviceName", current.name.trim())
-            form.append("startDate", store.startDate.trim())
-            form.append("endDate", store.endDate.trim())
-            console.log(form)
-            for (let pair of form.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
+        }
+        else {
+            if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
+                || store.number !== '' || store.startDate !== '' || store.endDate !== '') {
+
+                form.append("id", id)
+                form.append(" customerName", store.name.trim())
+                form.append("email", store.email.trim())
+                form.append("contact", store.number.trim())
+                form.append("address", store.address.trim())
+                form.append("serviceName", current.name.trim())
+                form.append("startDate", store.startDate.trim())
+                form.append("endDate", store.endDate.trim())
+                console.log(form)
+                for (let pair of form.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
             }
         }
+
     }
     return (
         <div className='user_bg'>
@@ -108,6 +119,9 @@ export default function Event() {
                         <label className='mb-3'>End Date : </label>
                         <input type="date" placeholder="End Date" className="form-control p-3 mb-3" value={store.endDate} onChange={(e) => Create(e, "endDate")} />
 
+                        {check && (
+                            <p className="text-danger">*Please fill the details</p>
+                        )}
 
 
                         <button className="btn btn-primary mt-4 w-50 " style={{ marginLeft: '80px' }} onClick={(e) => Booking(e)}> Book Now </button>

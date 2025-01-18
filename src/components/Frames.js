@@ -11,6 +11,8 @@ export default function Frames() {
 
     let [upload, setUpload] = useState(false)
     let [photoUrl, setPhotoUrl] = useState('')
+    let [check, setCheck] = useState(false)
+
 
 
     let { name } = useParams()
@@ -26,7 +28,7 @@ export default function Frames() {
         photo: null,
         currentDate: new Date().toISOString().split("T")[0],
         quantity: '',
-        custonmerSize: size
+
     })
 
     let current = products.find((product) => product.name === name)
@@ -48,7 +50,7 @@ export default function Frames() {
         let values = e.target.value
         let types = e.target.type
         let file = e.target.files
-
+        setCheck(false)
         if (types === 'file' && file.length > 0) {
             setStore(prev => (
                 {
@@ -91,26 +93,34 @@ export default function Frames() {
             id = lastPro[0].id + 1
         }
 
-        if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
-            || store.number !== '' || store.startDate !== '' || store.endDate !== '') {
+        if (store.name === '' || store.address === '' || store.email === ''
+            || store.number === '' || store.currentDate === '' || store.quantity === '' || size === '') {
+            setCheck(true)
 
-            form.append("id", id)
-            form.append(" customerName", store.name.trim())
-            form.append("email", store.email.trim())
-            form.append("contact", store.number.trim())
-            form.append("address", store.address.trim())
-            form.append("photo", store.photo)
-            form.append("frameName", current.name.trim())
-            form.append("date", store.currentDate.trim())
-            form.append("quantity", store.quantity.trim())
-            form.append("size", size.trim())
+        }
+        else {
+            if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
+                || store.number !== '' || store.currentDate !== '' || store.quantity !== '' || size !== '') {
+
+                form.append("id", id)
+                form.append(" customerName", store.name.trim())
+                form.append("email", store.email.trim())
+                form.append("contact", store.number.trim())
+                form.append("address", store.address.trim())
+                form.append("photo", store.photo)
+                form.append("frameName", current.name.trim())
+                form.append("date", store.currentDate.trim())
+                form.append("quantity", store.quantity.trim())
+                form.append("size", size.trim())
 
 
-            console.log(form)
-            for (let pair of form.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
+                console.log(form)
+                for (let pair of form.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
             }
         }
+
     }
 
     const handleFrameSizes = (value) => {
@@ -204,6 +214,12 @@ export default function Frames() {
                                 }
                             </select>
                         </div>
+
+                        {check && (
+                            <p className="text-danger">*Please fill the details</p>
+                        )}
+
+
 
                         <button className="btn btn-primary mt-4 w-50 " style={{ marginLeft: '80px' }} onClick={(e) => Order(e)}> Order Now </button>
                     </form>
