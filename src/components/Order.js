@@ -37,7 +37,7 @@ export default function Order() {
             setView(one)
             console.log(view)
             setdataView(true)
-            
+
         }
 
     }
@@ -161,7 +161,7 @@ export default function Order() {
 
                     <div className="mb-3 buttons">
                         <button className="btn btn-primary text-center create" onClick={() => setdataView(false)}>Cancel</button>
-                        <button className="btn btn-primary float-end create" onClick={(e) => Save(e)} >Save</button>
+                        <button className="btn btn-primary " onClick={(e) => Save(e)} >Save</button>
                     </div>
 
 
