@@ -77,8 +77,10 @@ export default function Event() {
                             <img src={current.coverPhoto} className="img-fluid" alt="Services" />
                         </div>
                         <div className="col-12 col-md-6 text-center mt-4">
-                            <p className="content">
+                            <p className="content ">
                                 {current.description}
+                            </p>
+                            <p className="content ">{current.id === 1 ? `Each frame tells the story of a love that began with a single glance and will last a lifetime.` : `A video doesn’t just document a smile—it freezes the sparkle in the eyes that comes with it.`}
                             </p>
                         </div>
                     </div>
@@ -112,6 +114,26 @@ export default function Event() {
                     </form>
                 </div>
             </main>
+
+
+            <footer className="text-white">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 p-4">
+                    <div className=" mb-4 mb-md-0 text-center address">
+                        <i className="bi bi-geo-alt-fill d-inline-block"><p className='d-inline-block ms-2'>14/2, Sasthiri Salai, Surampatti Valasu, Erode - 638009</p></i>
+                        <br></br><i className="bi bi-telephone-fill" />
+                        <p className='d-inline-block ms-2'>9842798919</p>
+                        <br></br> <i className="bi bi-envelope-fill"></i>
+                        <p className='d-inline-block ms-2'>Asathaldigitalstudio@gmail.com</p>
+                    </div>
+                    <div className="text-center social" >
+                        <p>Follow Us</p>
+                        <i className="bi bi-facebook m-2"></i>
+                        <i className="bi bi-instagram m-2"></i>
+                        <i className="bi bi-whatsapp m-2"></i>
+                        <i className="bi bi-google m-2"></i>
+                    </div>
+                </div>
+            </footer>
         </div>
     )
 }

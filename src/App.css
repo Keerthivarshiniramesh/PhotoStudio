@@ -55,23 +55,11 @@ header h3 {
 }
 
 
-
-/* .valid {
-  border: 1px solid green !important;
-}
-
-.invalid {
-  border: 1px solid red !important;
-} */
-
 .home {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('./assets/background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-
-
 
 @media (max-width: 768px) {
   .container.form1 {
@@ -105,54 +93,37 @@ header h3 {
   }
 }
 
-@media (min-width :344px) and (max-width : 882px) {
-  /* .card {
-    margin: 20px;
+@media (min-width: 344px) and (max-width: 882px) {
+  .card {
+    margin: 70px auto;
+    max-width: 90%;
+    border-radius: 8px;
+
   }
 
   .card-img-top {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    /* object-fit: cover; */
+    margin: 0 auto;
   }
 
   .cards {
-    display: block;
-
-  } */
-
-  @media (min-width: 344px) and (max-width: 882px) {
-    .card {
-      margin: 70px auto;
-      max-width: 90%;
-      border-radius: 8px;
-
-    }
-
-    .card-img-top {
-      width: 100%;
-      max-width: 300px;
-      height: auto;
-      object-fit: cover;
-      margin: 0 auto;
-    }
-
-    .cards {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .card-body {
-      text-align: center;
-    }
-
-    .btn {
-      width: 100%;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
+  .card-body {
+    text-align: center;
+  }
+
+  .btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
 }
 
 .popup {
@@ -176,23 +147,6 @@ header h3 {
 }
 
 
-/* @media (min-width: 344px) and (max-width: 882px) {
-  .create {
-    width: 150px;
-  }
-
-  .table {
-    width: 200px;
-  }
-
-  .popup {
-    width: 200px;
-    margin-left: 10px;
-
-  }
-
-} */
-
 @media (min-width: 344px) and (max-width: 882px) {
   .create {
     width: 150px;
@@ -214,7 +168,6 @@ header h3 {
     padding: 15px;
 
   }
-
 
   .buttons {
     .mb-3 {
@@ -296,8 +249,148 @@ header h3 {
 
 .f1 {
   position: relative;
-
   width: 100%;
   border-top-right-radius: 30% 10px;
   border-top-left-radius: 30% 10px;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+
+  .address {
+    margin-left: 300px;
+  }
+
+  .social {
+    margin-right: 300px;
+  }
+}
+
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .address {
+    margin-left: 300px;
+  }
+
+  .social {
+    margin-right: 300px;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  .address {
+    margin-left: 300px;
+  }
+
+  .social {
+    margin-right: 300px;
+  }
+}
+
+/*Slider */
+
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+.slider {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.slider img {
+  width: 200px;
+  height: 250px;
+  cursor: pointer;
+  transition: border 0.3s ease;
+  opacity: 0.3;
+}
+
+
+.slider img.active {
+  opacity: 1;
+}
+
+
+.details {
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.details img {
+  width: 300px;
+  height: 350px;
+}
+
+.uploadPhoto {
+  right: 50%;
+  transform: translateX(50%);
+  object-fit: fill;
+}
+
+.frame1 {
+  z-index: 3;
+}
+
+@media (max-width: 768px) {
+
+  .slider-container {
+    width: 90%;
+  }
+
+
+  .slider {
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+
+  }
+
+  .slider img {
+    width: 150px;
+    height: 200px;
+
+  }
+
+  .details img {
+    width: 250px;
+    height: 300px;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .slider img {
+    width: 120px;
+    height: 150px;
+  }
+
+  .details img {
+    width: 200px;
+    height: 250px;
+  }
+
+}
+
+@media (max-width: 250px) {
+  .details img {
+    width: 90%;
+    height: 250px;
+  }
+}
+
+@media (max-width: 245px) {
+  .details img {
+    width: 90%;
+    height: 250px;
+  }
 }

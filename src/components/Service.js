@@ -25,7 +25,7 @@ export default function Service() {
     })
 
 
-    let widthRef = useRef(null)
+    // let widthRef = useRef(null)
 
     let Views = (i) => {
         if (services[i]) {
@@ -33,6 +33,8 @@ export default function Service() {
             setView(one)
             console.log(view)
             setlist(true)
+            setCancel(false)
+            setdataView(false)
 
 
         }
@@ -47,6 +49,8 @@ export default function Service() {
             setView(one)
             console.log(view)
             setdataView(true)
+            setlist(false)
+            setCancel(false)
 
         }
 

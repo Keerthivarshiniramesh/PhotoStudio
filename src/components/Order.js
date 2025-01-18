@@ -37,6 +37,7 @@ export default function Order() {
             setView(one)
             console.log(view)
             setdataView(true)
+            
         }
 
     }

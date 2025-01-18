@@ -35,7 +35,8 @@ export default function Product() {
             setView(one)
             console.log(view)
             setlist(true)
-
+            setCancel(false)
+            setdataView(false)
 
         }
         else {
@@ -49,6 +50,8 @@ export default function Product() {
             setView(one)
             console.log(view)
             setdataView(true)
+            setlist(false)
+            setCancel(false)
 
         }
 

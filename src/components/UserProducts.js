@@ -31,7 +31,7 @@ export default function UserProducts() {
             <main className="d-flex flex-wrap justify-content-around align-items-center m-4">
                 {products.map((product, index) => (
                     <div className="card m-3" style={{ width: "100%", maxWidth: "350px" }} key={index}>
-                        <img src={product.coverPhoto} className="card-img-top" style={{ height: "200px", objectFit: "cover" }}
+                        <img src={product.coverPhoto} className="card-img-top" style={{ height: '250' }}
                             alt={product.name} />
                         <div className="card-body">
                             <h5 className="card-title text-primary">{product.name}</h5>
@@ -44,14 +44,17 @@ export default function UserProducts() {
             </main>
 
 
-            <footer>
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 pt-4">
-                    <div className="text-center mb-4 mb-md-0" style={{ marginLeft: '300px' }}>
-                        <i className="bi bi-geo-alt-fill"></i><p>Location</p>
-                        <i className="bi bi-telephone-fill"></i><p>Phone</p>
-                        <i className="bi bi-envelope-fill"></i><p>Email</p>
+
+            <footer className="text-white">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 p-4">
+                    <div className=" mb-4 mb-md-0 text-center address">
+                        <i className="bi bi-geo-alt-fill d-inline-block"><p className='d-inline-block ms-2'>14/2, Sasthiri Salai, Surampatti Valasu, Erode - 638009</p></i>
+                        <br></br><i className="bi bi-telephone-fill" />
+                        <p className='d-inline-block ms-2'>9842798919</p>
+                        <br></br> <i className="bi bi-envelope-fill"></i>
+                        <p className='d-inline-block ms-2'>Asathaldigitalstudio@gmail.com</p>
                     </div>
-                    <div className="text-center " style={{ marginRight: '300px' }}>
+                    <div className="text-center social" >
                         <p>Follow Us</p>
                         <i className="bi bi-facebook m-2"></i>
                         <i className="bi bi-instagram m-2"></i>

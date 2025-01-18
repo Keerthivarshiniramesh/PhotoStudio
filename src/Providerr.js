@@ -1,11 +1,13 @@
 import { createContext, useState } from "react"
 import React from 'react'
 import Cover1 from './assets/coverimage1.png'
-import Barque from './assets/baroque.jpg'
+import Barque from './assets/baroque.png'
 import photo from './assets/photo.png'
 import video from './assets/video.png'
 import Cover2 from './assets/coverimage2.jpg'
-import Metallic from './assets/metallicframe.jpg'
+import Metallic from './assets/metallicframe.png'
+import Wooden from './assets/woodenframe.png'
+import Cover3 from './assets/coverimage3.png'
 
 export const Contextuse = createContext()
 
@@ -63,9 +65,9 @@ export default function Providerr(props) {
         },
         {
             id: 3,
-            name: "Baroque  Frame",
-            coverPhoto: Cover1,
-            framePhoto: Barque,
+            name: "Wooden  Frame",
+            coverPhoto: Cover3,
+            framePhoto: Wooden,
             availableSizes: [
                 { height: 4, width: 6 },
                 { height: 5, width: 7 },
@@ -102,15 +104,15 @@ export default function Providerr(props) {
         },
         {
             id: 6,
-            name: "Modern Metallic Frame",
-            coverPhoto: Cover2,
-            framePhoto: Metallic,
+            name: "Wooden  Frame",
+            coverPhoto: Cover3,
+            framePhoto: Wooden,
             availableSizes: [
+                { height: 4, width: 6 },
                 { height: 5, width: 7 },
-                { height: 8, width: 10 },
-                { height: 11, width: 14 }
+                { height: 8, width: 10 }
             ],
-            stock: 'Out of Stock'
+            stock: 'Available'
 
         }
     ])
@@ -126,7 +128,7 @@ export default function Providerr(props) {
         {
             id: 2,
             name: "Event Videography",
-            description: "Professional videography for events.",
+            description: "Professional videography for events. ",
             coverPhoto: video,
             price: 2000
         }

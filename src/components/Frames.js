@@ -1,29 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Contextuse } from '../Providerr';
 import logo from '../assets/ADS_bg_Logo.png';
 import { useParams } from 'react-router-dom';
 import Loading from './Loading';
 
 export default function Frames() {
-    let { products, orders } = useContext(Contextuse); // Get products from the context
+    let { products, orders } = useContext(Contextuse);
 
-    // // Set initial state for the current index of products (acting as testimonials)
-    // const [currentIndex, setCurrentIndex] = useState(0);
 
-    // // Handle next testimonial
-    // const handleNext = () => {
-    //     setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-    // };
+    const [currentIndex, setCurrentIndex] = useState(0);
+    let [upload, setUpload] = useState(false)
+    let [photoUrl, setPhotoUrl] = useState('')
 
-    // // Handle previous testimonial
-    // const handlePrevious = () => {
-    //     setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
-    // };
-
-    // // Get the current product based on the currentIndex
-    // const { framePhoto } = products[currentIndex];
 
     let { name } = useParams()
+    let photoRef = useRef(null)
+
 
     let [size, setSize] = useState(null)
     let [store, setStore] = useState({
@@ -48,6 +40,10 @@ export default function Frames() {
     }, [current])
 
 
+    const handleImageClick = (index) => {
+        setCurrentIndex(index);
+    }
+
     function Create(e, keys) {
         let values = e.target.value
         let types = e.target.type
@@ -68,7 +64,27 @@ export default function Frames() {
         }
 
     }
+    console.log("url:", photoUrl)
+    function Add() {
+        if (photoRef.current.files[0]) {
 
+            const convertedURL = URL.createObjectURL(photoRef.current.files[0])
+            setPhotoUrl(convertedURL)
+            setUpload(true)
+        }
+        else {
+            alert("Upload Your photo !!!😊")
+        }
+
+
+
+
+
+
+
+
+    }
+    // console.log("Image", user_photo)
     let form = new FormData()
     let Order = (e) => {
         e.preventDefault()
@@ -94,7 +110,7 @@ export default function Frames() {
             form.append("date", store.currentDate.trim())
             form.append("quantity", store.quantity.trim())
             form.append("size", size.trim())
-            form.append("customerSize", store.custonmerSize)
+
 
             console.log(form)
             for (let pair of form.entries()) {
@@ -117,49 +133,48 @@ export default function Frames() {
 
     return (
         <div className="user_bg">
-            {/* Header Section */}
+
             <header className="container-fluid text-center bg-white home d-flex justify-content-center align-content-center">
                 <img
-                    src={logo}
-                    style={{ width: '50px', height: '50px' }} // Fixed typo here (width instead of with)
-                    className="d-inline-block mt-5 pt-2"
-                    alt="logo"
+                    src={logo} style={{ width: '50px', height: '50px' }} className="d-inline-block mt-5 pt-2" alt="logo"
                 />
                 <h3 className="mt-5 mb-5 text-white">ASATHAL DIGITAL STUDIO</h3>
             </header>
 
-            {/* Testimonials Section */}
             <main className=" m-4">
-                <div className="py-5 bg-light">
-                    <div className="container text-center">
-                        <h3 className="text-2xl font-bold mb-4">Testimonials</h3>
+                <div className="details ">
+                    <img src={products[currentIndex].framePhoto} className='position-relative frame1' />
 
-                        <div className="card mx-auto shadow-lg rounded-3 p-4" style={{ maxWidth: '600px' }}>
-                            <div className="card-body">
-                                <div className="d-flex justify-content-center mb-4">
-                                    <img
-                                        src="dfd"
-                                        alt='Frame'
-                                        className=" "
-                                        width="100"
-                                        height="100"
-                                    />
-                                </div>
-                            </div>
-                            {/* Navigation Buttons */}
-                            <div className="d-flex justify-content-between mt-4">
-                                <button className="btn btn-secondary">
-                                    Previous
-                                </button>
-                                <button className="btn btn-secondary">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {
+                        upload &&
+
+                        <img src={photoUrl} className={` uploadPhoto border position-absolute`}  ></img>
+
+
+                    }
+
+                    <p>{products[currentIndex].name}</p>
+
                 </div>
 
-                <input type='file' onChange={(e) => Create(e, 'photo')}></input>
+                <div className="slider-container">
+                    <div className="slider">
+                        {products.map((product, index) => (
+                            <img key={index} src={product.framePhoto} alt="gfyuf" className={`thumbnail ${index === currentIndex ? "active" : ""}`}
+                                onClick={() => handleImageClick(index)} />
+                        ))}
+                    </div>
+
+
+                </div>
+
+
+
+                <div className='d-flex align-items-center justify-content-end mt-5'>
+                    <input type='file' className='' onChange={(e) => Create(e, 'photo')} ref={photoRef}></input>
+                    <button className="btn rounded border mt-3 view" onClick={() => Add()}>Add Photo</button>
+                </div>
+
 
                 <div className="container form1 mx-auto p-4" style={{ maxWidth: '700px' }}>
                     <h3 className="p-3 text-primary">Personal Details</h3>
@@ -180,7 +195,7 @@ export default function Frames() {
                         <input type="date" placeholder=" Date" className="form-control p-3 mb-3" value={store.currentDate} onChange={(e) => Create(e, "currentDate")} />
 
                         <label className='mb-3'> Quantity: </label>
-                        <input type="text" placeholder="Quantity Date" className="form-control p-3 mb-3" value={store.quantity} onChange={(e) => Create(e, "quantity")} />
+                        <input type="text" placeholder="Quantity " className="form-control p-3 mb-3" value={store.quantity} onChange={(e) => Create(e, "quantity")} />
 
                         <div className="mb-3 ">
                             <label className="" >Size: </label>
@@ -202,6 +217,26 @@ export default function Frames() {
                 </div>
 
             </main >
+
+
+            <footer className="text-white">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 p-4">
+                    <div className=" mb-4 mb-md-0 text-center address">
+                        <i className="bi bi-geo-alt-fill d-inline-block"><p className='d-inline-block ms-2'>14/2, Sasthiri Salai, Surampatti Valasu, Erode - 638009</p></i>
+                        <br></br><i className="bi bi-telephone-fill" />
+                        <p className='d-inline-block ms-2'>9842798919</p>
+                        <br></br> <i className="bi bi-envelope-fill"></i>
+                        <p className='d-inline-block ms-2'>Asathaldigitalstudio@gmail.com</p>
+                    </div>
+                    <div className="text-center social" >
+                        <p>Follow Us</p>
+                        <i className="bi bi-facebook m-2"></i>
+                        <i className="bi bi-instagram m-2"></i>
+                        <i className="bi bi-whatsapp m-2"></i>
+                        <i className="bi bi-google m-2"></i>
+                    </div>
+                </div>
+            </footer>
         </div >
     );
 }
