@@ -142,12 +142,12 @@ export default function Product() {
     }
     return (
         <div>
-            <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center'>
+            <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center mb-5'>
                 <img src={logo} style={{ with: '50px', height: '50px' }} className='d-inline-block mt-5 pt-2' />
                 <h3 className='mt-5  mb-5 text-white'>ASATHAL DIGITAL STUDIO </h3>
             </header>
 
-            <button className='btn btn-primary m-5 float-end create' onClick={() => setCancel(true)} >Create Products</button>
+            <button className='btn btn-primary m-5 float-end  produce' onClick={() => setCancel(true)} >Create Products</button>
 
             <table className="table caption-top position-relative">
                 <caption>List of Products</caption>
@@ -221,8 +221,8 @@ export default function Product() {
                             </div>
 
                             <div className="mb-3 buttons">
-                                <button className="btn btn-primary float-start create" onClick={() => setCancel(false)}>Cancel</button>
-                                <button className="btn btn-primary float-end create" onClick={(e) => Save(e)}>Save</button>
+                                <button className="btn btn-primary create" onClick={() => setCancel(false)}>Cancel</button>
+                                <button className="btn btn-primary" onClick={(e) => Save(e)}>Save</button>
                             </div>
 
                         </form>
@@ -280,8 +280,8 @@ export default function Product() {
 
 
                             <div className="mb-3 buttons">
-                                <button className="btn btn-primary float-start create" onClick={() => setlist(false)}>Cancel</button>
-                                <button className="btn btn-primary float-end create" onClick={(e) => Edit(e)} >Save</button>
+                                <button className="btn btn-primary  create" onClick={() => setlist(false)}>Cancel</button>
+                                <button className="btn btn-primary " onClick={(e) => Edit(e)} >Save</button>
                             </div>
 
                         </form>

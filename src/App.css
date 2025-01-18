@@ -72,6 +72,12 @@ header h3 {
 }
 
 @media (max-width: 576px) {
+
+  .login {
+    display: flex;
+    flex-direction: column;
+  }
+
   .container.form1 {
     padding: 15px;
     width: 100%;
@@ -123,10 +129,42 @@ header h3 {
   }
 }
 
+@media (max-width: 340px) {
+  .card {
+    margin: 70px auto;
+    max-width: 90%;
+    border-radius: 8px;
+  }
+
+  .card-img-top {
+    width: 100%;
+    max-width: 300px;
+
+    /* object-fit: cover; */
+    margin: 0 auto;
+  }
+
+  .cards {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+  .btn {
+    width: 90%;
+    margin: 0px !important;
+
+  }
+}
+
 .popup {
   margin-top: 0px;
   top: 25%;
-  left: 35%;
+  left: 40%;
   border: 1px solid #ddd;
   border-radius: 8px;
   background: white;
@@ -135,16 +173,67 @@ header h3 {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 0px;
   transition: transform 0.5s ease-out;
+
 }
 
 .close {
   cursor: pointer;
 }
 
+.create {
+  /* width: 150px; */
+  margin-right: 150px;
+}
+
 @media (min-width: 344px) and (max-width: 882px) {
   .create {
-    width: 150px;
+    margin-right: 100px;
+  }
+
+  .table {
+    width: 50%;
+    max-width: 200px;
+    margin: 50px auto;
+
+  }
+
+  .popup {
+    width: 90%;
+    max-width: 300px;
+    margin: 10px auto;
+    left: 15%;
+    padding: 15px;
+
+
+  }
+
+  .buttons {
+    .mb-3 {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+
+
+    /* .float-end {
+      float: none !important;
+      width: 50% !important;
+      margin: 4px;
+    } */
+  }
+
+  .produce {
+    width: 20% !important;
+    margin: 40px !important;
+  }
+}
+
+@media (max-width: 344px) {
+  .create {
+    margin-right: 100px !important;
+    margin-bottom: 20px !important;
   }
 
   .table {
@@ -158,7 +247,7 @@ header h3 {
     width: 90%;
     max-width: 300px;
     margin: 10px auto;
-    left: 15%;
+    left: 0%;
     padding: 15px;
 
   }
@@ -170,12 +259,7 @@ header h3 {
       gap: 10px;
     }
 
-    .float-start,
-    .float-end {
-      float: none !important;
-      width: 70%;
-      margin: 4px;
-    }
+
   }
 }
 
@@ -233,6 +317,7 @@ header h3 {
 
 .view {
   transition: 0.1s ease-in;
+  margin-bottom: 3px;
 
 }
 
