@@ -47,10 +47,22 @@ export default function Frames() {
     }
 
     function Create(e, keys) {
+        let phoneReg = /^[6-9][0-9]{9}$/
         let values = e.target.value
         let types = e.target.type
         let file = e.target.files
         setCheck(false)
+
+        if (keys === 'number') {
+            if (phoneReg.test(values)) {
+                setCheck(false)
+                console.log("true")
+            }
+            else {
+                setCheck(true)
+            }
+        }
+
         if (types === 'file' && file.length > 0) {
             setStore(prev => (
                 {
@@ -185,16 +197,16 @@ export default function Frames() {
                     <h3 className="p-3 text-primary">Personal Details</h3>
                     <form>
                         <label className='mb-3'>Name : </label>
-                        <input type="email" placeholder="UserName" className="form-control p-3 mb-3" value={store.name} onChange={(e) => Create(e, "name")} />
+                        <input type="text" placeholder="UserName" className="form-control p-3 mb-3" value={store.name} onChange={(e) => Create(e, "name")} />
 
                         <label className='mb-3'>Email : </label>
                         <input type="email" placeholder="Email" className="form-control p-3 mb-3" value={store.email} onChange={(e) => Create(e, "email")} />
 
                         <label className='mb-3'>Contact Number : </label>
-                        <input type="email" placeholder="Number" className="form-control p-3 mb-3" value={store.number} onChange={(e) => Create(e, "number")} />
+                        <input type="text" placeholder="Number" className="form-control p-3 mb-3" value={store.number} onChange={(e) => Create(e, "number")} />
 
                         <label className='mb-3'>Address : </label>
-                        <input type="email" placeholder="Address" className="form-control p-3 mb-3" value={store.address} onChange={(e) => Create(e, "address")} />
+                        <input type="text" placeholder="Address" className="form-control p-3 mb-3" value={store.address} onChange={(e) => Create(e, "address")} />
 
                         <label className='mb-3'> Date : </label>
                         <input type="date" placeholder=" Date" className="form-control p-3 mb-3" value={store.currentDate} onChange={(e) => Create(e, "currentDate")} />
@@ -216,7 +228,7 @@ export default function Frames() {
                         </div>
 
                         {check && (
-                            <p className="text-danger">*Please fill the details</p>
+                            <p className="text-danger">*Please fill the details or enter the valid number</p>
                         )}
 
 
@@ -229,15 +241,15 @@ export default function Frames() {
 
 
             <footer className="text-white">
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 p-4">
-                    <div className=" mb-4 mb-md-0 text-center address">
+                <div className="d-flex flex-column flex-md-row justify-content-around align-items-center bg-secondary f1 p-4">
+                    <div className=" mb-4 mb-md-0 ">
                         <i className="bi bi-geo-alt-fill d-inline-block"><p className='d-inline-block ms-2'>14/2, Sasthiri Salai, Surampatti Valasu, Erode - 638009</p></i>
                         <br></br><i className="bi bi-telephone-fill" />
                         <p className='d-inline-block ms-2'>9842798919</p>
                         <br></br> <i className="bi bi-envelope-fill"></i>
                         <p className='d-inline-block ms-2'>Asathaldigitalstudio@gmail.com</p>
                     </div>
-                    <div className="text-center social" >
+                    <div className="" >
                         <p>Follow Us</p>
                         <i className="bi bi-facebook m-2"></i>
                         <i className="bi bi-instagram m-2"></i>

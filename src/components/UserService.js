@@ -44,15 +44,15 @@ export default function UserService() {
 
 
             <footer className="text-white">
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center bg-secondary f1 p-4">
-                    <div className=" mb-4 mb-md-0 text-center address">
+                <div className="d-flex flex-column flex-md-row justify-content-around align-items-center bg-secondary f1 p-4">
+                    <div className=" mb-4 mb-md-0 ">
                         <i className="bi bi-geo-alt-fill d-inline-block"><p className='d-inline-block ms-2'>14/2, Sasthiri Salai, Surampatti Valasu, Erode - 638009</p></i>
                         <br></br><i className="bi bi-telephone-fill" />
                         <p className='d-inline-block ms-2'>9842798919</p>
                         <br></br> <i className="bi bi-envelope-fill"></i>
                         <p className='d-inline-block ms-2'>Asathaldigitalstudio@gmail.com</p>
                     </div>
-                    <div className="text-center social" >
+                    <div className="" >
                         <p>Follow Us</p>
                         <i className="bi bi-facebook m-2"></i>
                         <i className="bi bi-instagram m-2"></i>

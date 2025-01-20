@@ -12,7 +12,6 @@ root.render(
 
   <BrowserRouter>
     <Providerr  >
-
       <App />
     </Providerr>
   </BrowserRouter>

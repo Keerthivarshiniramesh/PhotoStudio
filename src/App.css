@@ -333,37 +333,6 @@ header h3 {
   border-top-left-radius: 30% 10px;
 }
 
-@media (min-width: 768px) and (max-width: 991.98px) {
-
-  .address {
-    margin-left: 300px;
-  }
-
-  .social {
-    margin-right: 300px;
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199.98px) {
-  .address {
-    margin-left: 300px;
-  }
-
-  .social {
-    margin-right: 300px;
-  }
-}
-
-@media (min-width: 1200px) {
-
-  .address {
-    margin-left: 300px;
-  }
-
-  .social {
-    margin-right: 300px;
-  }
-}
 
 /*Slider */
 
