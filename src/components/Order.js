@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Order() {
 
-    let { orders, setOrder } = useContext(Contextuse)
+    let { orders } = useContext(Contextuse)
+    const beurl = process.env.REACT_APP_beUrl
 
     let use = useNavigate()
 
-    let [status, setStatus] = useState('Processed')
+    let [status, setStatus] = useState('Pending')
     let [dataview, setdataView] = useState(false)
+    let [read, setRead] = useState(false)
     let [view, setView] = useState({
 
         id: '',
@@ -19,7 +21,7 @@ export default function Order() {
         date: '',
         contact: "",
         address: "",
-        photo: "",
+        image: null,
         productId: '',
         frameName: '',
         size: {
@@ -27,34 +29,146 @@ export default function Order() {
             width: ''
         },
         quantity: '',
+        status: ''
 
     })
 
-
+    // Read the orders
     let Read = (i) => {
-        if (orders[i]) {
-            let one = orders[i]
-            setView(one)
-            console.log(view)
-            setdataView(true)
 
-        }
+        fetch(`${beurl}fetch-order/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.order)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+        setdataView(false)
+        setdataView(false)
+        setRead(true)
 
     }
 
     const form = new FormData();
 
+    // Edit the orders
+
+    let Update = (i) => {
+        fetch(`${beurl}fetch-order/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.order)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+        setRead(false)
+        setdataView(true)
+
+    }
+
     let Save = (e) => {
         e.preventDefault()
-        if (status !== '') {
+        fetch(`${beurl}update-order/${view.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({ status })
 
-            form.append('status', status)
-            console.log(status)
-        }
-        else {
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in Update the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
 
-        }
     }
+
+    // Delete the Orders
+
+    let Delete = (i) => {
+
+        fetch(`${beurl}delete-order/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("ERR", err)
+                alert("Trouble in connecting to the Server !!!")
+            })
+
+    }
+
+    const handleDownload = (e) => {
+        e.preventDefault()
+        const imageUrl = `${beurl}${view.image && view.image.startsWith('/') ? view.image.slice(1) : view.image || ''}`;
+
+        fetch(imageUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = 'image.png'; // Set the filename
+                document.body.appendChild(link); // Append link to the DOM
+                link.click(); // Programmatically click the link to trigger download
+                document.body.removeChild(link); // Clean up
+                URL.revokeObjectURL(blobUrl); // Revoke the object URL
+            })
+            .catch(error => {
+                console.error('Error downloading the image:', error);
+            });
+    };
+
 
     return (
         <div>
@@ -69,9 +183,9 @@ export default function Order() {
                     <tr>
                         <th scope="col">S.No</th>
                         <th scope="col" className="d-none d-md-table-cell">Order.Id</th>
-                        <th scope="col">Date</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col" className="d-none d-md-table-cell">Contact</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -81,12 +195,13 @@ export default function Order() {
                         orders && orders.map((order, index) =>
                         (
                             <tr key={index}>
-                                <th className="d-none d-md-table-cell">{order.id}</th>
+                                <th className="d-none d-md-table-cell">{index + 1}</th>
                                 <td>{order.productId}</td>
-                                <td>{order.date}</td>
                                 <td>{order.customerName}</td>
                                 <td className="d-none d-md-table-cell">{order.contact}</td>
-                                <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
+                                <td><i className="bi bi-pencil-square" onClick={() => Update(order.id)}></i> </td>
+                                <td><i className="bi bi-trash-fill" onClick={() => Delete(order.id)} ></i> </td>
+                                <td><button className='btn btn-primary' onClick={() => Read(order.id)}>View</button></td>
                             </tr>
                         ))
                     }
@@ -94,7 +209,7 @@ export default function Order() {
             </table>
 
 
-            {/* Read only */}
+            {/* Edit only */}
             {
                 dataview &&
 
@@ -113,10 +228,6 @@ export default function Order() {
                         <p className='ps-3 d-inline-block'>{view.email}</p>
                     </div>
 
-                    <div className="mb-3">
-                        <label className="form-label fw-bold">Date :</label>
-                        <p className='ps-3 d-inline-block'>{view.date}</p>
-                    </div>
 
                     <div className="mb-3">
                         <label className="form-label fw-bold">Contact :</label>
@@ -124,7 +235,10 @@ export default function Order() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label fw-bold">Photo :</label><img src={view.photo} alt='Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} download />
+                        <label className="form-label fw-bold">Photo :</label><img
+                            src={`${beurl}${view.image && view.image.startsWith('/') ? view.image.slice(1) : view.image || ''}`} alt="Photo"
+                            style={{ width: '100px', height: '100px', marginLeft: '30px' }} />
+                        <a href="#" className='mx-4 ' onClick={handleDownload}><i className="bi bi-download downloads"></i></a>
 
                     </div>
 
@@ -134,8 +248,8 @@ export default function Order() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label fw-bold">Frame Name :</label>
-                        <a href='/products' className='text-dark' ><p className='ps-3 d-inline-block'>{view.frameName}</p></a>
+                        <label className="form-label fw-bold">Frame Id :</label>
+                        <a href='/products' className='text-dark' ><p className='ps-3 d-inline-block'>{view.productId}</p></a>
                     </div>
 
                     <div className="mb-3 ">
@@ -154,7 +268,7 @@ export default function Order() {
                             <option value="Pending" >Pending</option>
                             <option value="Processed" >Processed</option>
                             <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
+                            <option value="Shipped">Shipped</option>
 
                         </select>
                     </div>
@@ -167,6 +281,78 @@ export default function Order() {
 
                 </div>
 
+            }
+
+
+            {/* Read Bookings */}
+            {
+                read &&
+
+                <div className='popup border rounded position-absolute'>
+                    <h3 className='text-center '>Products</h3>
+                    <div className='d-flex justify-content-end  fs-3 fw-bold close' onClick={() => setRead(false)}>&times;</div>
+
+
+                    <div className="mb-3">
+                        <label className='fw-bold '> CustomerName : </label>
+                        <p className='ps-3 d-inline-block'>{view.customerName}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Email :</label>
+                        <p className='ps-3 d-inline-block'>{view.email}</p>
+                    </div>
+
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Contact :</label>
+                        <p className='ps-3 d-inline-block'>{view.contact}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Photo :</label><img
+                            src={`${beurl}${view.image && view.image.startsWith('/') ? view.image.slice(1) : view.image || ''}`}
+                            alt="Photo"
+                            style={{ width: '100px', height: '100px', marginLeft: '30px' }}
+                        />
+
+
+                    </div>
+
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Contact :</label>
+                        <p className='ps-3 d-inline-block'>{view.address}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Frame Id :</label>
+                        <a href='/products' className='text-dark' ><p className='ps-3 d-inline-block'>{view.productId}</p></a>
+                    </div>
+
+                    <div className="mb-3 ">
+                        <label className="form-label fw-bold ">Size : </label>
+                        <p className='ps-3 d-inline-block'>{`${view.size.height} * ${view.size.width}`}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Quantity :</label>
+                        <p className='ps-3 d-inline-block'>{view.quantity}</p>
+                    </div>
+
+
+                    <div className="mb-3">
+                        <div className="mb-3">
+                            <label className="form-label fw-bold">Status :</label>
+                            <p className='ps-3 d-inline-block'>{view.status}</p>
+                        </div>
+                    </div>
+
+                    <div className="mb-3  buttons">
+                        <button className="btn btn-primary text-center create" onClick={() => setRead(false)}>Cancel</button>
+
+                    </div>
+                </div>
             }
         </div >
     )

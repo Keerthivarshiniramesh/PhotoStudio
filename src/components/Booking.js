@@ -1,16 +1,18 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Contextuse } from '../Providerr'
 import logo from '../assets/ADS_bg_Logo.png'
-import { useNavigate } from 'react-router-dom'
+
 
 export default function Bookings() {
 
-    let { bookings, setBookings } = useContext(Contextuse)
+    let { bookings } = useContext(Contextuse)
 
-    let use = useNavigate()
+    const beurl = process.env.REACT_APP_beUrl
 
-    let [status, setStatus] = useState('Processed')
+
+    let [status, setStatus] = useState('Pending')
     let [dataview, setdataView] = useState(false)
+    let [read, setread] = useState(false)
     let [view, setView] = useState({
 
         id: '',
@@ -21,34 +23,124 @@ export default function Bookings() {
         startDate: '',
         endDate: '',
         serviceId: '',
-        serviceName: '',
         status: ''
 
     })
 
+    // Delete the Bookings
+    let Delete = (i) => {
 
-    let Read = (i) => {
-        if (bookings[i]) {
-            let one = bookings[i]
-            setView(one)
-            console.log(view)
-            setdataView(true)
-        }
+        fetch(`${beurl}delete-booking/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("ERR", err)
+                alert("Trouble in connecting to the Server !!!")
+            })
 
     }
 
-    const form = new FormData();
+    // View the Bookings
+    let Read = (i) => {
+
+        fetch(`${beurl}fetch-booking/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.booking)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+        setread(true)
+        setdataView(false)
+    }
+
+// Edit the Bookings
+
+    let Update = (i) => {
+
+        fetch(`${beurl}fetch-booking/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.booking)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+        setdataView(true)
+        setread(false)
+    }
+
+
+
 
     let Save = (e) => {
         e.preventDefault()
 
-        if (status !== '') {
+        console.log("Id is", view.id)
+        console.log(status)
+        fetch(`${beurl}update-booking/${view.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({ status })
 
-            form.append('status', status)
-            console.log(status)
-        }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in Update the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+
 
     }
+
+
 
     return (
         <div>
@@ -68,6 +160,7 @@ export default function Bookings() {
                         <th scope="col" className="d-none d-md-table-cell">Contact</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,12 +168,14 @@ export default function Bookings() {
                         bookings && bookings.map((book, index) =>
                         (
                             <tr key={index}>
-                                <th>{book.id}</th>
+                                <th>{index + 1}</th>
                                 <td className="d-none d-md-table-cell">{book.serviceId}</td>
                                 <td className="d-none d-md-table-cell">{book.email}</td>
                                 <td>{book.customerName}</td>
                                 <td className="d-none d-md-table-cell">{book.contact}</td>
-                                <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
+                                <td><i className="bi bi-pencil-square" onClick={() => Update(book.id)}></i> </td>
+                                <td><i className="bi bi-trash-fill" onClick={() => Delete(book.id)} ></i> </td>
+                                <td><button className='btn btn-primary' onClick={() => Read(book.id)}>View</button></td>
                             </tr>
                         ))
                     }
@@ -88,7 +183,7 @@ export default function Bookings() {
             </table>
 
 
-            {/* Read only */}
+            {/* Edit Booking */}
             {
                 dataview &&
 
@@ -128,8 +223,8 @@ export default function Bookings() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label fw-bold">Service Name :</label>
-                        <a href='/service' className='text-dark' ><p className='ps-3 d-inline-block'>{view.serviceName}</p></a>
+                        <label className="form-label fw-bold">Service Id :</label>
+                        <a href='/service' className='text-dark' ><p className='ps-3 d-inline-block'>{view.serviceId}</p></a>
                     </div>
 
 
@@ -137,7 +232,7 @@ export default function Bookings() {
                         <label className="form-label fw-bold" >Status: </label>
                         <select value={status} onChange={(e) => setStatus(e.target.value)} className='ms-3'>
                             <option value="Accept" >Accept</option>
-                            <option value="Processed" >Processed</option>
+                            <option value="Pending" >Pending</option>
                             <option value="Reject">Reject</option>
 
                         </select>
@@ -151,6 +246,66 @@ export default function Bookings() {
 
                 </div>
 
+            }
+
+
+            {/* Read Bookings */}
+            {
+                read &&
+
+                <div className='popup border rounded position-absolute'>
+                    <h3 className='text-center '>Service</h3>
+                    <div className='d-flex justify-content-end  fs-3 fw-bold close' onClick={() => setread(false)}>&times;</div>
+
+
+                    <div className="mb-3">
+                        <label className='fw-bold '> CustomerName : </label>
+                        <p className='ps-3 d-inline-block'>{view.customerName}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Email :</label>
+                        <p className='ps-3 d-inline-block'>{view.email}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Start Date :</label>
+                        <p className='ps-3 d-inline-block'>{view.startDate}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">End Date :</label>
+                        <p className='ps-3 d-inline-block'>{view.endDate}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Contact :</label>
+                        <p className='ps-3 d-inline-block'>{view.contact}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Address :</label>
+                        <p className='ps-3 d-inline-block'>{view.address}</p>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Service Id :</label>
+                        <a href='/service' className='text-dark' ><p className='ps-3 d-inline-block'>{view.serviceId}</p></a>
+                    </div>
+
+
+                    <div className="mb-3">
+                        <div className="mb-3">
+                            <label className="form-label fw-bold">Status :</label>
+                            <p className='ps-3 d-inline-block'>{view.status}</p>
+                        </div>
+                    </div>
+
+                    <div className="mb-3  buttons">
+                        <button className="btn btn-primary text-center create" onClick={() => setread(false)}>Cancel</button>
+
+                    </div>
+                </div>
             }
         </div >
     )

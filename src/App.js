@@ -16,11 +16,50 @@ import Denied from './components/Denied';
 import Frames from './components/Frames';
 import Event from './components/Event';
 
+
 function App() {
   let { isadmin } = useContext(Contextuse)
   console.log(isadmin)
   const isAuth = true
 
+  // const BeUrl = process.env.REACT_APP_beUrl
+
+  // console.log("url:", BeUrl)
+
+  // const newUser = { name: "John", email: "john@example.com", role: "admin", password: "password123" }
+
+  // fetch(`${BeUrl}create-user`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Accept": "application/json"
+  //   },
+  //   body: JSON.stringify(newUser)
+  // })
+  // .then(res => res.json())
+  // .then(data => {
+  //   console.log("Received data in Add User:", data)
+  //   if (data.success===true) {
+  //     fetchUsers()
+  //   }
+  // })
+  // .catch(err => {
+  //   console.log("Trouble in adding User:", err)
+  //   alert("Trouble connecting to Server!")
+  // })
+
+
+  // const fetchUsers = () => {
+  //   fetch(`${BeUrl}fetch-users`)
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     console.log("fetched Users: ",data)
+  //   })
+  //   .catch(err => {
+  //     console.log("Trouble in adding User:", err)
+  //     alert("Trouble connecting to Server!")
+  //   })
+  // }
 
   return (
     <Routes>
@@ -36,13 +75,28 @@ function App() {
           (isadmin === true ? <Home /> : <Denied />) : <Login />
       } />
 
+
       <Route path='/' element={<HomePage />}></Route>
       <Route path='/userservice' element={<UserService />}></Route>
       <Route path='/userproduct' element={<UserProducts />}></Route>
-      <Route path='/userproduct/:name' element={<Frames />} />
-      <Route path='/userservice/:name' element={<Event />} />
+      <Route path='/userproduct/:id' element={<Frames />} />
+      <Route path='/userservice/:id' element={<Event />} />
     </Routes>
   );
 }
 
 export default App;
+
+
+// useEffect(() => {
+//     if (products) {
+
+//     }
+// }, [products])
+// || currentIndex === null || !products
+// if (id) {
+//   if (current) {
+
+//     setCurrentIndex(current.id)
+//   }
+// }

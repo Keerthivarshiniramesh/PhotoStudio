@@ -11,8 +11,8 @@ export default function HomePage() {
     let use = useNavigate()
     useEffect(() => {
         setTimeout(() => setVisible(true), 100);
-
     }, []);
+
     return (
         <div className="user_bg">
             <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center'>
@@ -94,6 +94,7 @@ export default function HomePage() {
                     </div>
                 </div>
             </footer>
+
         </div>
 
     )

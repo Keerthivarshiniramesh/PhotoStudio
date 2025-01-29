@@ -2,11 +2,19 @@ import React, { useContext } from 'react'
 import logo from '../assets/ADS_bg_Logo.png'
 import { Contextuse } from '../Providerr'
 import { useNavigate } from 'react-router-dom'
+import Loading from './Loading'
 
 export default function UserService() {
 
     let { services } = useContext(Contextuse)
     let use = useNavigate()
+
+    const beurl = process.env.REACT_APP_beUrl
+
+    if (services === null) {
+        return <Loading />
+    }
+
 
     return (
         <div className='user_bg'>
@@ -31,12 +39,12 @@ export default function UserService() {
             <main className="d-flex flex-wrap justify-content-around align-items-center m-4">
                 {services.map((service, index) => (
                     <div className="card m-3" style={{ width: "100%", maxWidth: "350px" }} key={index}>
-                        <img src={service.coverPhoto} className="card-img-top" style={{ height: "200px", objectFit: "cover" }}
+                        <img src={`${beurl}${service.coverPhoto}`} className="card-img-top" style={{ height: "200px", objectFit: "cover" }}
                             alt={service.name} />
                         <div className="card-body">
                             <h5 className="card-title text-primary">{service.name}</h5>
                             {/* <a href={index === 0 ? '/photography' : '/home'} className="btn rounded border mt-3 view"> {index === 0 ? "Photo Details..." : " Video Details ..."}</a> */}
-                            <button className="btn rounded border mt-3 view" onClick={() => use(`/userservice/${service.name}`)}>{index === 0 ? "Photo Details..." : " Video Details ..."}</button>
+                            <button className="btn rounded border mt-3 view" onClick={() => use(`/userservice/${service.id}`)}>{index === 0 ? "Photo Details..." : " Video Details ..."}</button>
                         </div>
                     </div>
                 ))}
@@ -61,6 +69,7 @@ export default function UserService() {
                     </div>
                 </div>
             </footer>
+
         </div >
     )
 }

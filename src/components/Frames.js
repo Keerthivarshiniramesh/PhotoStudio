@@ -5,7 +5,62 @@ import { useParams } from 'react-router-dom';
 import Loading from './Loading';
 
 export default function Frames() {
-    let { products, orders } = useContext(Contextuse);
+    const beurl = process.env.REACT_APP_beUrl
+    const { products } = useContext(Contextuse)
+
+
+    let { id } = useParams()
+    let [current, setCurrent] = useState(null)
+    console.log("id is", id)
+    useEffect(() => {
+
+        fetch(`${beurl}fetch-product/${id}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setCurrent(data.product)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+
+    }, [id])
+
+
+    // useEffect(() => {
+    //     fetch(`${beurl}fetch-products`, {
+    //         method: "GET",
+    //         credentials: "include"
+    //     })
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (data.success === true) {
+    //                 alert(data.message)
+    //                 console.log("fetch frame", data.products)
+    //                 setProducts(data.products)
+    //             }
+    //             else {
+    //                 alert(data.message)
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log("Error in fetch the products", err)
+    //             alert("Trouble in connecting to Server !!")
+    //         })
+
+    // }, [])
+
+    console.log("Product", products)
 
 
 
@@ -15,7 +70,7 @@ export default function Frames() {
 
 
 
-    let { name } = useParams()
+
     let photoRef = useRef(null)
 
 
@@ -26,18 +81,25 @@ export default function Frames() {
         number: '',
         address: '',
         photo: null,
-        currentDate: new Date().toISOString().split("T")[0],
         quantity: '',
 
     })
+    console.log(products)
 
-    let current = products.find((product) => product.name === name)
-    const [currentIndex, setCurrentIndex] = useState(current.id - 1);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         if (current && current.availableSizes.length > 0) {
+
+            console.log("current.availableSizes:", current.availableSizes)
+
+            const selectedSize = {
+                height: current.availableSizes[0].height,
+                width: current.availableSizes[0].width
+            }
             // Set the initial value as a stringified object
-            setSize(JSON.stringify(current.availableSizes[0]));
+            setSize(selectedSize);
         }
     }, [current])
 
@@ -96,14 +158,6 @@ export default function Frames() {
     let form = new FormData()
     let Order = (e) => {
         e.preventDefault()
-        let id;
-        if (orders.length === 0) {
-            id = 1
-        }
-        else {
-            let lastPro = orders.slice(-1)
-            id = lastPro[0].id + 1
-        }
 
         if (store.name === '' || store.address === '' || store.email === ''
             || store.number === '' || store.currentDate === '' || store.quantity === '' || size === '') {
@@ -111,39 +165,72 @@ export default function Frames() {
 
         }
         else {
-            if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
+            if (store.name !== '' || store.address !== '' || store.email !== ''
                 || store.number !== '' || store.currentDate !== '' || store.quantity !== '' || size !== '') {
 
-                form.append("id", id)
-                form.append(" customerName", store.name.trim())
-                form.append("email", store.email.trim())
-                form.append("contact", store.number.trim())
-                form.append("address", store.address.trim())
-                form.append("photo", store.photo)
-                form.append("frameName", current.name.trim())
-                form.append("date", store.currentDate.trim())
-                form.append("quantity", store.quantity.trim())
-                form.append("size", size.trim())
+
+                form.append("customerName", store.name)
+                form.append("email", store.email)
+                form.append("contact", store.number)
+                form.append("address", store.address)
+                form.append("productId", products[currentIndex].id)
+                form.append("height", size.height)
+                form.append("width", size.width)
+                console.log("Type of size", typeof size)
+                form.append("quantity", store.quantity)
+                // console.log(typeof store.quantity)
+                form.append("totalAmount", current.price)
+                form.append("image", store.photo)
 
 
                 console.log(form)
                 for (let pair of form.entries()) {
-                    console.log(pair[0] + ': ' + pair[1]);
+                    console.log("Forms :", pair[0] + ': ' + pair[1]);
                 }
+
+                fetch(`${beurl}place-order`, {
+                    method: "POST",
+                    credentials: "include",
+                    body: form
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success === true) {
+                            alert(data.message)
+                            window.location.reload()
+                        }
+                        else {
+                            console.log("All details")
+                            alert(data.message)
+                        }
+                    })
+                    .catch(err => {
+                        console.log("Error", err)
+                        alert("Trouble in connecting to the Server !!")
+                    })
             }
         }
 
     }
 
     const handleFrameSizes = (value) => {
+        console.log("value", typeof value)
 
-        setSize(value)
+        // Split the string into an array based on the comma
+        const [height, width] = value.split(',');
+
+        const selectedSize = {
+            height: height,
+            width: width
+        }
+        console.log('selectedSize:', selectedSize)
+
+        setSize(selectedSize)
     }
 
-    console.log('sizes:', size)
-    console.log('current:', current.availableSizes)
 
-    if (current === null || size === null) {
+
+    if (current === null || size === null || currentIndex === null || !products) {
         return <Loading />
     }
 
@@ -159,7 +246,7 @@ export default function Frames() {
 
             <main className=" m-4">
                 <div className="details ">
-                    <img src={products[currentIndex].framePhoto} className='position-relative frame1' />
+                    <img src={`${beurl}${products[currentIndex].framePhoto}`} className='position-relative frame1' />
 
                     {
                         upload &&
@@ -167,14 +254,14 @@ export default function Frames() {
 
                     }
 
-                    <p>{products[currentIndex].name}</p>
+                    <p>{ }</p>
 
                 </div>
 
                 <div className="slider-container">
                     <div className="slider">
                         {products.map((product, index) => (
-                            <img key={index} src={product.framePhoto} alt="gfyuf" className={`thumbnail ${index === currentIndex ? "active" : ""}`}
+                            <img key={index} src={`${beurl}${product.framePhoto}`} alt="FramePhoto" className={` ${index === currentIndex ? "active" : ""}`}
                                 onClick={() => handleImageClick(index)} />
                         ))}
                     </div>
@@ -208,19 +295,19 @@ export default function Frames() {
                         <label className='mb-3'>Address : </label>
                         <input type="text" placeholder="Address" className="form-control p-3 mb-3" value={store.address} onChange={(e) => Create(e, "address")} />
 
-                        <label className='mb-3'> Date : </label>
-                        <input type="date" placeholder=" Date" className="form-control p-3 mb-3" value={store.currentDate} onChange={(e) => Create(e, "currentDate")} />
-
                         <label className='mb-3'> Quantity: </label>
                         <input type="text" placeholder="Quantity " className="form-control p-3 mb-3" value={store.quantity} onChange={(e) => Create(e, "quantity")} />
 
+                        <label className='mb-3'> Amount: </label>
+                        <input type="text" placeholder="Quantity " className="form-control p-3 mb-3" value={current.price} disabled />
+
                         <div className="mb-3 ">
                             <label className="" >Size: </label>
-                            <select value={size} onChange={(e) => handleFrameSizes(e.target.value)} className='ms-3'>
+                            <select defaultValue={size} onChange={(e) => handleFrameSizes(e.target.value)} className='ms-3'>
                                 {
                                     current && current.availableSizes.map((sizes, index) => {
                                         return (
-                                            <option key={index} value={JSON.stringify(sizes)} >{`${sizes.height} * ${sizes.width}`}</option>
+                                            <option key={index} value={`${sizes.height + ',' + sizes.width}`} >{`${sizes.height} * ${sizes.width}`}</option>
                                         )
                                     })
                                 }

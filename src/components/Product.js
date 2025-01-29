@@ -1,18 +1,43 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { Contextuse } from '../Providerr';
 import logo from '../assets/ADS_bg_Logo.png'
+import Loading from './Loading';
+import { useParams } from 'react-router-dom';
+
+
+
 export default function Product() {
 
     let { products, setProducts } = useContext(Contextuse)
+
+    let beurl = process.env.REACT_APP_beUrl
+
+    let { id } = useParams()
 
     let [create, setCreate] = useState({
 
         name: '',
         coverPhoto: null,
         framePhoto: null,
+        price: "",
         availableSizes: [],
+        isAvailable: false
 
     })
+
+    const handleSizeRemoval = (i) => {
+        console.log("func called")
+        setCreate(prev => {
+            let tempCreate = { ...prev }
+            let tempSize = tempCreate.availableSizes.filter((item, index) => index !== i)
+            tempCreate.availableSizes = tempSize
+            return tempCreate
+        })
+        console.log("Create after updation:", create)
+    }
+
+    console.log("Create available sizes:", create.availableSizes)
+
     let [cancel, setCancel] = useState(false)
     let [list, setlist] = useState(false)
     let [dataview, setdataView] = useState(false)
@@ -21,46 +46,23 @@ export default function Product() {
         name: '',
         coverPhoto: null,
         framePhoto: null,
-        availableSizes: '',
-        stock: ''
+        price: "",
+        availableSizes: [],
+        isAvailable: false
+
     })
 
-    let radioRef = useRef(null)
     let heightRef = useRef(null)
     let widthRef = useRef(null)
 
-    let Views = (i) => {
-        if (products[i]) {
-            let one = products[i]
-            setView(one)
-            console.log(view)
-            setlist(true)
-            setCancel(false)
-            setdataView(false)
+    // create products
 
-        }
-        else {
-            console.error('Product not found at index:', i);
-        }
+    let Add = (e) => {
+        e.preventDefault()
+        let heights = Number(heightRef.current.value)
+        let widths = Number(widthRef.current.value)
 
-    }
-    let Read = (i) => {
-        if (products[i]) {
-            let one = products[i]
-            setView(one)
-            console.log(view)
-            setdataView(true)
-            setlist(false)
-            setCancel(false)
-
-        }
-
-
-    }
-
-    let Add = () => {
-        let heights = heightRef.current.value
-        let widths = widthRef.current.value
+        console.log("h w:", typeof heights, widths)
 
         setCreate((prev) => ({
             ...prev,
@@ -70,18 +72,26 @@ export default function Product() {
         }));
 
     }
-    const form = new FormData();
+
     let Store = (e, keys) => {
 
         let values = e.target.value
         let types = e.target.type
         let file = e.target.files
+        let check = e.target.checked
 
         if (types === 'file' && file.length > 0) {
             setCreate(prev => (
                 {
                     ...prev,
                     [keys]: file[0]
+                }))
+        }
+        else if (types === "checkbox") {
+            setCreate(prev => (
+                {
+                    ...prev,
+                    [keys]: check
                 }))
         }
         else {
@@ -91,55 +101,221 @@ export default function Product() {
                     [keys]: values
                 }))
         }
-        console.log(view)
+        console.log(create)
     }
+
+    console.log(products)
+
+
 
     let Save = (e) => {
         e.preventDefault()
-        let id;
-        if (products.length === 0) {
-            id = 1
+        const forms = new FormData();
+
+        if (create.name !== '' || create.coverPhoto !== null || create.framePhoto !== null || !create.availableSizes) {
+            forms.append('name', create.name)
+            forms.append('availableSizes', JSON.stringify(create.availableSizes))
+            forms.append('price', create.price)
+            forms.append('isAvailable', create.isAvailable)
+            forms.append('framePhoto', create.framePhoto)
+            forms.append('coverPhoto', create.coverPhoto)
+            console.log("Forms :", forms)
+            for (let pair of forms.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            fetch(`${beurl}add-product`, {
+                method: "POST",
+                // headers:
+                // {
+                //     "Content-Type": "application/json",
+                //     "Accept" : "application/json"
+                // },
+                credentials: "include",
+                body: forms
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success === true) {
+                        alert(data.message)
+                        window.location.reload()
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .catch(err => {
+                    console.log("Error", err)
+                    alert("Trouble in connecting to the Server !!")
+                }
+                )
         }
         else {
-            let lastPro = products.slice(-1)
-            id = lastPro[0].id + 1
-        }
-        const selectedRadio = radioRef.current.querySelector('input[name="stock"]:checked');
-        const selectedValue = selectedRadio ? selectedRadio.value : null;
-
-
-        if (id !== '' || create.name !== '' || create.coverPhoto !== '' || create.framePhoto !== '' || create.availableSizes !== '' || selectedValue !== '') {
-            form.append('id', id)
-            form.append('name', create.name)
-            form.append('coverPhoto', create.coverPhoto)
-            form.append('framePhoto', create.framePhoto)
-            form.append('availableSizes', create.availableSizes)
-            form.append('stock', selectedValue)
-        }
-        else {
-
+            alert("Fill the form")
         }
     }
-    let SizeChange = (e, i, key) => {
-        const { value } = e.target;
 
+
+
+    // Edit the products
+
+    let formData = new FormData()
+    let SizeChange = (e, i, key) => {
+        let { value } = e.target;
+        let values = Number(value)
 
         const temp = [...view.availableSizes];
-        temp[i] = { ...temp[i], [key]: value };
-
+        temp[i] = { ...temp[i], [key]: values };
+        console.log(typeof values)
         setView((prevState) => ({
             ...prevState,
             availableSizes: temp,
         }));
     }
+    // name, availableSizes[{height:, width:}], price(number), isAvailable(boolean), framePhoto, coverPhoto
 
     let Edit = (e) => {
+        console.log("Views", view)
         e.preventDefault()
-        setProducts((prev) =>
-            prev.map((product) =>
-                product.id === view.id ? { ...product, ...view } : product
-            ))
+        formData.append('name', view.name)
+        formData.append('availableSizes', JSON.stringify(view.availableSizes))
+        console.log("Available Sizes in update", JSON.stringify(view.availableSizes))
+        formData.append('price', view.price)
+        formData.append('isAvailable', view.isAvailable)
+        formData.append('framePhoto', view.framePhoto)
+        formData.append('coverPhoto', view.coverPhoto)
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        console.log("id in edit:", view.id)
+
+        fetch(`${beurl}update-product/${view.id}`, {
+            method: "POST",
+            credentials: "include",
+            body: formData
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in Update the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
     }
+    let Update = (i) => {
+
+
+        fetch(`${beurl}fetch-product/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.product)
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+        setlist(true)
+        setCancel(false)
+        setdataView(false)
+
+
+
+    }
+
+    // Read the products
+
+    let Read = (i) => {
+        fetch(`${beurl}fetch-product/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.product)
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+        setdataView(true)
+        setlist(false)
+        setCancel(false)
+
+    }
+
+    // Delete the products
+    let Delete = (i) => {
+        fetch(`${beurl}delete-product/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("ERR", err)
+                alert("Trouble in connecting to the Server !!!")
+            })
+    }
+
+    let [photoedit, setPhotoedit] = useState(false)
+    let [photoUrl, setPhotoUrl] = useState('')
+    let [coverphotoedit, setPhotoCoveredit] = useState(false)
+    let [coverphotoUrl, setPhotoCoverUrl] = useState('')
+    let PhotoChange = (e, keys) => {
+        let file = e.target.files[0]
+        if (keys === 'framePhoto') {
+            setView({ ...view, [keys]: file })
+            const convertedURL = URL.createObjectURL(file)
+            setPhotoUrl(convertedURL)
+            setPhotoedit(true)
+        }
+        else if (keys === 'coverPhoto') {
+            setView({ ...view, [keys]: file })
+            const convertedURL = URL.createObjectURL(file)
+            setPhotoCoverUrl(convertedURL)
+            setPhotoCoveredit(true)
+        }
+
+    }
+
+
+
+    if (products === null) {
+        return <Loading />
+    }
+
     return (
         <div>
             <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center mb-5'>
@@ -155,26 +331,33 @@ export default function Product() {
 
                     <tr>
                         <th scope="col">S.No</th>
+                        <th scope="col" className="d-none d-md-table-cell"> Pro.Id</th>
                         <th scope="col">Name</th>
                         <th scope="col" className="d-none d-md-table-cell">CoverPhoto</th>
                         <th scope="col" className="d-none d-md-table-cell">FramePhoto</th>
                         <th scope="col" className="d-none d-md-table-cell">AvailableSize</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+
                     {
+
+
                         products && products.map((pro, index) =>
                         (
                             <tr key={index}>
-                                <th>{pro.id}</th>
+                                <th>{index + 1}</th>
+                                <td className="d-none d-md-table-cell">{pro.id}</td>
                                 <td>{pro.name}</td>
-                                <td className="d-none d-md-table-cell"><img src={pro.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
-                                <td className="d-none d-md-table-cell"><img src={pro.framePhoto} style={{ width: "50px", height: "50px" }} /></td>
+                                <td className="d-none d-md-table-cell"><img src={`${beurl}${pro.coverPhoto}`} style={{ width: "50px", height: "50px" }} /></td>
+                                <td className="d-none d-md-table-cell"><img src={`${beurl}${pro.framePhoto}`} style={{ width: "50px", height: "50px" }} /></td>
                                 <td className="d-none d-md-table-cell">{pro.availableSizes.length}</td>
-                                <td><i className="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
-                                <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
+                                <td><i className="bi bi-trash-fill" onClick={() => Delete(pro.id)} ></i> </td>
+                                <td><i className="bi bi-pencil-square" onClick={() => Update(pro.id)}></i> </td>
+                                <td><button className='btn btn-primary' onClick={() => Read(pro.id)}>View</button></td>
                             </tr>
 
                         ))
@@ -183,6 +366,8 @@ export default function Product() {
 
                 </tbody>
             </table>
+
+            {/* Create Products */}
 
             {
                 cancel &&
@@ -208,16 +393,34 @@ export default function Product() {
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label"><h6>AvailableSize:</h6> </label>
-                                <input type="text" className="form-control mb-1" ref={heightRef} placeholder='Height' />
-                                <input type="text" className="form-control mb-1" ref={widthRef} placeholder='Width' />
-                                <button className="btn btn-primary m-2" onClick={() => Add()}>Add</button>
+                                <label><h6>Price:</h6></label>
+                                <input type='number' className='form-control' value={create.price} onChange={(e) => Store(e, "price")} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label " ><h6>Stock:</h6></label>
-                                <input type="radio" name='stock' className='ms-4' value='Available' />Available
-                                <input type="radio" name='stock' className='ms-4' value='Out of Stock' />Out of Stock
+                                <label className="form-label"><h6>AvailableSize:</h6> </label>
+                                <input type="number" className="form-control mb-1" ref={heightRef} placeholder='Height' />
+                                <input type="number" className="form-control mb-1" ref={widthRef} placeholder='Width' />
+                                <button className="btn btn-primary m-2" onClick={(e) => Add(e)}>Add</button>
+                            </div>
+
+                            <div>
+                                {(create.availableSizes && create.availableSizes.length > 0) &&
+                                    create.availableSizes.map((item, index) => {
+                                        return (
+                                            <div className='w-100 d-flex justify-content-between align-items-center border rounded m-1 px-1' key={index}>
+                                                <p className='m-0'>{item.height + 'x' + item.width}</p>
+                                                <i className='bi bi-x fs-4' onClick={() => handleSizeRemoval(index)} role='button'></i>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+
+                            <div className="mb-3">
+
+                                <label className="form-label " ><h6>Stock</h6></label>
+                                <input type="checkbox" className='ms-4' name="isAvailable" checked={create.isAvailable} onChange={(e) => Store(e, "isAvailable")} />Available
                             </div>
 
                             <div className="mb-3 buttons">
@@ -226,10 +429,12 @@ export default function Product() {
                             </div>
 
                         </form>
+
                     </div>
                 </div>
             }
 
+            {/* {Edit products} */}
             {
                 list &&
 
@@ -245,13 +450,21 @@ export default function Product() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
-                                <input id='coverPhoto' hidden type='file' className='form-control' onChange={(e) => setView({ ...view, coverPhoto: e.target.files[0] })} />
+                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={coverphotoedit === true ? coverphotoUrl : `${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
+                                <input id='coverPhoto' hidden type='file' className='form-control' accept="image/*" onChange={(e) => PhotoChange(e, 'coverPhoto')} />
+                            </div>
+
+
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor='framePhoto'><h6>FramePhoto :</h6><img src={photoedit === true ? photoUrl : `${beurl}${view.framePhoto}`} alt='FramePhoto' style={{ width: '100px', height: '100px' }} /></label>
+                                <input type="file" id='framePhoto' hidden className="form-control" accept="image/*" onChange={(e) => PhotoChange(e, 'framePhoto')} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor='framePhoto'><h6>FramePhoto :</h6><img src={view.framePhoto} alt='FramePhoto' style={{ width: '100px', height: '100px' }} /></label>
-                                <input type="file" id='framePhoto' hidden className="form-control" onChange={(e) => setView({ ...view, framePhoto: e.target.files[0] })} />
+                                <label><h6>Price:</h6></label>
+                                <input type='text' className='form-control' value={view.price || ''}
+                                    onChange={(e) => setView({ ...view, price: e.target.value })} />
                             </div>
 
                             <div className="mb-3">
@@ -262,11 +475,11 @@ export default function Product() {
                                         <div key={index} className="d-flex mb-2">
 
                                             <input
-                                                type="text" className="form-control" value={size.height} onChange={(e) => SizeChange(e, index, 'height')} />
+                                                type="number" className="form-control" value={size.height} onChange={(e) => SizeChange(e, index, 'height')} />
                                             <span className="mx-2">x</span>
 
                                             <input
-                                                type="text" className="form-control" value={size.width} onChange={(e) => SizeChange(e, index, 'width')} />
+                                                type="number" className="form-control" value={size.width} onChange={(e) => SizeChange(e, index, 'width')} />
                                         </div>
                                     ))
                                 }
@@ -274,8 +487,7 @@ export default function Product() {
 
                             <div className="mb-3">
                                 <label className="form-label " ><h6>Stock:</h6></label>
-                                <input type="radio" name='stock' className='ms-4' value='Available' checked={view.stock === 'Available'} onChange={() => setView((prevState) => ({ ...prevState, stock: "Available" }))} />Available
-                                <input type="radio" name='stock' className='ms-4' value='Out of Stock' checked={view.stock === 'Out of Stock'} onChange={() => setView((prevState) => ({ ...prevState, stock: "Out of Stock" }))} />Out of Stock
+                                <input type="checkbox" className='ms-4' name="isAvailable" checked={view.isAvailable} onChange={(e) => setView({ ...view, isAvailable: e.target.checked })} />Available
                             </div>
 
 
@@ -304,13 +516,18 @@ export default function Product() {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label fw-bold">CoverPhoto :</label><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
+                            <label className="form-label fw-bold">CoverPhoto :</label><img src={`${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
 
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label fw-bold">CoverPhoto :</label><img src={view.framePhoto} alt='FramePhoto' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
+                            <label className="form-label fw-bold">FramePhoto :</label><img src={`${beurl}${view.framePhoto}`} alt='FramePhoto' style={{ width: '100px', height: '100px', marginLeft: "30px" }} />
 
+                        </div>
+
+                        <div className="mb-3">
+                            <label className='fw-bold '> Price : </label>
+                            <p className='ps-3 d-inline-block'>{view.price}</p>
                         </div>
 
                         <div className="mb-3 ">
@@ -330,7 +547,7 @@ export default function Product() {
 
                         <div className="mb-3">
                             <label className="form-label fw-bold" >Stock: </label>
-                            <p className='ps-3 d-inline-block'>{view.stock}</p>
+                            <p className='ps-3 d-inline-block'>{`${view.isAvailable === true ? "Available" : "Out of Stock"}`}</p>
                         </div>
 
 

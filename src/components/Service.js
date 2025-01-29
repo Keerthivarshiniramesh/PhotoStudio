@@ -1,16 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Contextuse } from '../Providerr';
 import logo from '../assets/ADS_bg_Logo.png'
+import Loading from './Loading';
 export default function Service() {
 
     let { services, setServices } = useContext(Contextuse)
+
+    let beurl = process.env.REACT_APP_beUrl
 
     let [create, setCreate] = useState({
 
         name: '',
         description: '',
         coverPhoto: null,
-        price: ''
+        price: '',
+        isAvailable: false
 
     })
     let [cancel, setCancel] = useState(false)
@@ -21,55 +25,154 @@ export default function Service() {
         name: '',
         description: '',
         coverPhoto: null,
-        price: ''
+        price: '',
+        isAvailable: false
     })
 
 
-    // let widthRef = useRef(null)
+    // Delete the Services
 
-    let Views = (i) => {
-        if (services[i]) {
-            let one = services[i]
-            setView(one)
-            console.log(view)
-            setlist(true)
-            setCancel(false)
-            setdataView(false)
-
-
-        }
-        else {
-            console.error('Product not found at index:', i);
-        }
+    const Delete = (i) => {
+        fetch(`${beurl}delete-service/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("ERR", err)
+                alert("Trouble in connecting to the Server !!!")
+            })
 
     }
+
+    // Update the Services
+
+    let Update = (i) => {
+
+        fetch(`${beurl}fetch-service/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.service)
+
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+        setlist(true)
+        setCancel(false)
+        setdataView(false)
+    }
+
+
+    let Edit = (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('name', view.name)
+        formData.append('description', view.description)
+        formData.append('price', view.price)
+        formData.append('isAvailable', view.isAvailable)
+        formData.append('coverPhoto', view.coverPhoto)
+
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        console.log("id in edit:", view.id)
+
+        fetch(`${beurl}update-service/${view.id}`, {
+            method: "POST",
+            credentials: "include",
+            body: formData
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    alert(data.message)
+                    window.location.reload()
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in Update the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+
+    }
+
+
+    // View the services
+
     let Read = (i) => {
-        if (services[i]) {
-            let one = services[i]
-            setView(one)
-            console.log(view)
-            setdataView(true)
-            setlist(false)
-            setCancel(false)
+        fetch(`${beurl}fetch-service/${i}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setView(data.service)
 
-        }
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+        setdataView(true)
+        setlist(false)
+        setCancel(false)
+
+
 
 
     }
 
-
+    // Create the Services
     const form = new FormData();
     let Store = (e, keys) => {
 
         let values = e.target.value
         let types = e.target.type
         let file = e.target.files
+        let check = e.target.checked
 
         if (types === 'file' && file.length > 0) {
             setCreate(prev => (
                 {
                     ...prev,
                     [keys]: file[0]
+                }))
+        }
+        else if (types === "checkbox") {
+            setCreate(prev => (
+                {
+                    ...prev,
+                    [keys]: check
                 }))
         }
         else {
@@ -84,21 +187,42 @@ export default function Service() {
 
     let Save = (e) => {
         e.preventDefault()
-        let id;
-        if (services.length === 0) {
-            id = 1
-        }
-        else {
-            let lastPro = services.slice(-1)
-            id = lastPro[0].id + 1
-        }
 
-        if (id !== '' || create.name !== '' || create.description !== '' || create.coverPhoto !== '' || create.price !== '') {
-            form.append('id', id)
+
+        if (create.name !== '' || create.description !== '' || create.coverPhoto !== '' || create.price !== '') {
             form.append('name', create.name)
             form.append('description', create.description)
-            form.append('coverPhoto', create.coverPhoto)
             form.append('price', create.price)
+            form.append('isAvailable', create.isAvailable)
+            form.append('coverPhoto', create.coverPhoto)
+
+
+
+            for (let pair of form.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            fetch(`${beurl}add-service`, {
+                method: "POST",
+                credentials: "include",
+                body: form
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success === true) {
+                        alert(data.message)
+                        window.location.reload()
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .catch(err => {
+                    console.log("Error", err)
+                    alert("Trouble in connecting to the Server !!")
+                }
+                )
+
 
         }
         else {
@@ -106,14 +230,11 @@ export default function Service() {
         }
     }
 
-
-    let Edit = (e) => {
-        e.preventDefault()
-        setServices((prev) =>
-            prev.map((service) =>
-                service.id === view.id ? { ...service, ...view } : service
-            ))
+    if (services === null) {
+        return <Loading />
     }
+
+
     return (
         <div className='overflow-hidden'>
             <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center mb-5'>
@@ -134,6 +255,7 @@ export default function Service() {
                         <th scope="col" className="d-none d-md-table-cell">Price</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,12 +263,13 @@ export default function Service() {
                         services && services.map((ser, index) =>
                         (
                             <tr key={index}>
-                                <th>{ser.id}</th>
+                                <th>{index + 1}</th>
                                 <td>{ser.name}</td>
-                                <td className="d-none d-sm-table-cell"><img src={ser.coverPhoto} style={{ width: "50px", height: "50px" }} /></td>
+                                <td className="d-none d-sm-table-cell"><img src={`${beurl}${ser.coverPhoto}`} style={{ width: "50px", height: "50px" }} /></td>
                                 <td className="d-none d-md-table-cell">{ser.price}</td>
-                                <td><i className="bi bi-pencil-square" onClick={() => Views(index)}></i> </td>
-                                <td><button className='btn btn-primary' onClick={() => Read(index)}>View</button></td>
+                                <td><i className="bi bi-pencil-square" onClick={() => Update(ser.id)}></i> </td>
+                                <td><i className="bi bi-trash-fill" onClick={() => Delete(ser.id)} ></i> </td>
+                                <td><button className='btn btn-primary' onClick={() => Read(ser.id)}>View</button></td>
                             </tr>
 
                         ))
@@ -155,6 +278,8 @@ export default function Service() {
 
                 </tbody>
             </table>
+
+            {/* Create the Services */}
 
             {
                 cancel &&
@@ -185,6 +310,11 @@ export default function Service() {
                                 <input type='text' className='form-control' value={create.price} onChange={(e) => Store(e, "price")} />
                             </div>
 
+                            <div className="mb-3">
+
+                                <label className="form-label " ><h6>Available</h6></label>
+                                <input type="checkbox" className='ms-4' name="isAvailable" checked={create.isAvailable} onChange={(e) => Store(e, "isAvailable")} />Available
+                            </div>
 
                             <div className="mb-3 buttons">
                                 <button className="btn btn-primary  create" onClick={() => setCancel(false)}>Cancel</button>
@@ -196,6 +326,7 @@ export default function Service() {
                 </div>
             }
 
+            {/* Update the Services */}
             {
                 list &&
 
@@ -217,7 +348,7 @@ export default function Service() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
+                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={`${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
                                 <input id='coverPhoto' hidden type='file' className='form-control' onChange={(e) => setView({ ...view, coverPhoto: e.target.files[0] })} />
                             </div>
 
@@ -225,6 +356,11 @@ export default function Service() {
                                 <label><h6>Price:</h6></label>
                                 <input type='text' className='form-control' value={view.price || ''}
                                     onChange={(e) => setView({ ...view, price: e.target.value })} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label " ><h6>Stock:</h6></label>
+                                <input type="checkbox" className='ms-4' name="isAvailable" checked={view.isAvailable} onChange={(e) => setView({ ...view, isAvailable: e.target.checked })} />Available
                             </div>
 
 
@@ -258,7 +394,7 @@ export default function Service() {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label fw-bold">CoverPhoto :</label><img src={view.coverPhoto} alt='Cover Photo' style={{ width: '100px', height: '100px', marginLeft: '30px' }} />
+                            <label className="form-label fw-bold">CoverPhoto :</label><img src={`${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px', marginLeft: '30px' }} />
 
                         </div>
 
@@ -267,6 +403,10 @@ export default function Service() {
                             <p className='ps-3 d-inline-block'>{view.price}</p>
                         </div>
 
+                        <div className="mb-3">
+                            <label className="form-label fw-bold" >Stock: </label>
+                            <p className='ps-3 d-inline-block'>{`${view.isAvailable === true ? "Available" : "Out of Stock"}`}</p>
+                        </div>
 
                         <div className="mb-3">
                             <button className="btn btn-primary text-center create" onClick={() => setdataView(false)}>Cancel</button>

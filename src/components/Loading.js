@@ -7,7 +7,7 @@ function Loading() {
         <img src={logo} style={{ with: '50px', height: '50px' }} className='d-inline-block mt-5 pt-2' />
         <h3 className='mt-5  mb-5 text-white'>ASATHAL DIGITAL STUDIO </h3>
       </header>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center m-5 align-content-center">
         <div className="spinner-border" role="status">
           <p></p><span className="visually-hidden">Loading...</span>
         </div>

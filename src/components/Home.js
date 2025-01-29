@@ -4,11 +4,55 @@ import book from '../assets/bookings.png'
 import product from '../assets/products.jpg'
 import service from '../assets/services.png'
 import logo from '../assets/ADS_bg_Logo.png'
+import { useNavigate } from 'react-router-dom'
 export default function Home() {
 
+    let use = useNavigate()
+
+    let beurl = process.env.REACT_APP_beUrl
+    let Logout = () => {
+        fetch(`${beurl}logout`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message)
+                if (data.success === true) {
+                    use('/auth')
+                }
+            })
+            .catch(err => {
+                console.log("Error in Logout ", err)
+                alert("Trouble in connecting to the Server !!!")
+            }
+            )
+    }
+
+    let checkCurrentUser = () => {
+        fetch(`${beurl}fetch-authuser`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message)
+                if (data.success === true) {
+                    console.log("Current User")
+                }
+            })
+            .catch(err => {
+                console.log("Error in Logout ", err)
+                alert("Trouble in connecting to the Server !!!")
+            }
+            )
+    }
+
+
     useEffect(() => {
-       
+        checkCurrentUser()
     }, [])
+
     return (
         <div className=''>
             <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center'>
@@ -16,7 +60,10 @@ export default function Home() {
                 <h3 className='mt-5  mb-5 text-white'>ASATHAL DIGITAL STUDIO </h3>
             </header>
 
-            <main className='d-flex justify-content-around align-items-center mt-5 cards'>
+            <button className='btn btn-primary mb-5  me-5 float-end  produce' onClick={() => Logout()} >Logout</button>
+
+            <main className='d-flex justify-content-around align-items-center mt-5 pt-5 cards'>
+
                 <div className="card" style={{ width: "190px", height: "200px" }}>
                     <img src={order} className="card-img-top" alt="..." />
                     <div className="card-body">

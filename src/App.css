@@ -33,6 +33,10 @@
   overflow: hidden;
 }
 
+.downloads {
+  font-size: 1.5 rem;
+  font-weight: bold !important;
+}
 
 header {
   font-family: "Playfair Display", serif;
@@ -108,7 +112,6 @@ header h3 {
     width: 100%;
     max-width: 300px;
     height: auto;
-    /* object-fit: cover; */
     margin: 0 auto;
   }
 
@@ -139,8 +142,6 @@ header h3 {
   .card-img-top {
     width: 100%;
     max-width: 300px;
-
-    /* object-fit: cover; */
     margin: 0 auto;
   }
 
@@ -183,7 +184,6 @@ header h3 {
 }
 
 .create {
-  /* width: 150px; */
   margin-right: 150px;
 }
 
@@ -196,7 +196,6 @@ header h3 {
     width: 50%;
     max-width: 200px;
     margin: 50px auto;
-
   }
 
   .popup {
@@ -205,8 +204,6 @@ header h3 {
     margin: 10px auto;
     left: 15%;
     padding: 15px;
-
-
   }
 
   .buttons {
@@ -215,13 +212,6 @@ header h3 {
       flex-direction: row;
       gap: 10px;
     }
-
-
-    /* .float-end {
-      float: none !important;
-      width: 50% !important;
-      margin: 4px;
-    } */
   }
 
   .produce {
@@ -258,8 +248,6 @@ header h3 {
       flex-direction: column;
       gap: 10px;
     }
-
-
   }
 }
 
@@ -269,10 +257,6 @@ header h3 {
 }
 
 .user_bg {
-  /* background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('./assets/user_bgimg.png') no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 100vh; */
   font-family: "Playwrite AU SA", serif !important;
   font-optical-sizing: auto;
   font-weight: 300;
@@ -333,7 +317,6 @@ header h3 {
   border-top-left-radius: 30% 10px;
 }
 
-
 /*Slider */
 
 .slider-container {
@@ -384,7 +367,6 @@ header h3 {
   z-index: 3;
 }
 
-
 @media (max-width: 768px) {
 
   .slider-container {
@@ -411,7 +393,6 @@ header h3 {
   }
 }
 
-
 @media (max-width: 480px) {
   .slider img {
     width: 120px;
@@ -428,12 +409,8 @@ header h3 {
     flex-direction: column;
     gap: 15px;
     overflow: hidden;
-
-
   }
-
 }
-
 
 @media (max-width: 250px) {
   .details img {

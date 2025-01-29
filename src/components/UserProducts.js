@@ -2,11 +2,20 @@ import React, { useContext } from 'react'
 import logo from '../assets/ADS_bg_Logo.png'
 import { Contextuse } from '../Providerr'
 import { useNavigate } from 'react-router-dom'
+import Loading from './Loading'
 
 export default function UserProducts() {
 
     let { products } = useContext(Contextuse)
-    let use = useNavigate()
+    console.log(products)
+
+    let navi = useNavigate()
+
+    const beurl = process.env.REACT_APP_beUrl
+
+    if (products === null) {
+        return <Loading />
+    }
 
     return (
         <div className='user_bg'>
@@ -31,18 +40,19 @@ export default function UserProducts() {
             <main className="d-flex flex-wrap justify-content-around align-items-center m-4">
                 {products.map((product, index) => (
                     <div className="card m-3" style={{ width: "100%", maxWidth: "350px" }} key={index}>
-                        <img src={product.coverPhoto} className="card-img-top" style={{ height: '250' }}
+                        <img src={`${beurl}${product.coverPhoto}`} className="card-img-top" style={{ height: '250' }}
                             alt={product.name} />
                         <div className="card-body">
                             <h5 className="card-title text-primary">{product.name}</h5>
-                            <p className="card-text">{product.stock}</p>
+                            <p className="card-text">{product.price}</p>
+                            <p className="card-text">{product.isAvailable === true ? `Available` : `Out of Stock`}</p>
                             {/* <a href="/order" className="btn rounded border view"> View ...</a> */}
-                            <button className="btn rounded border mt-3 view" onClick={() => use(`/userproduct/${product.name}`)}>Frame Detail...</button>
+                            <button className="btn rounded border mt-3 view" onClick={() => navi(`/userproduct/${product.id}`)}>Frame Detail...</button>
+
                         </div>
                     </div>
                 ))}
             </main>
-
 
 
             <footer className="text-white">
@@ -63,6 +73,7 @@ export default function UserProducts() {
                     </div>
                 </div>
             </footer>
+            
         </div>
     )
 }

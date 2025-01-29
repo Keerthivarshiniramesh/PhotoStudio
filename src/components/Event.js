@@ -1,11 +1,12 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import logo from '../assets/ADS_bg_Logo.png'
-import { Contextuse } from '../Providerr'
 import { useParams } from 'react-router-dom'
+import Loading from './Loading'
 export default function Event() {
-    let { services, bookings, } = useContext(Contextuse)
+  
 
-    let { name } = useParams()
+    let { id } = useParams()
+    const beurl = process.env.REACT_APP_beUrl
 
     let [store, setStore] = useState({
         name: '',
@@ -18,9 +19,29 @@ export default function Event() {
 
     })
     let [check, setCheck] = useState(false)
+    let [current, setCurrent] = useState(null)
 
+    useEffect(() => {
+        fetch(`${beurl}fetch-service/${id}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === true) {
+                    setCurrent(data.service)
 
-    let current = services.find((service) => service.name === name)
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in fetch the products", err)
+                alert("Trouble in connecting to Server !!")
+            })
+    }
+        , [])
 
 
     function Create(e, keys) {
@@ -47,40 +68,59 @@ export default function Event() {
     let Booking = (e) => {
         e.preventDefault()
 
-        let id;
-        if (bookings.length === 0) {
-            id = 1
-        }
-        else {
-            let lastPro = bookings.slice(-1)
-            id = lastPro[0].id + 1
-        }
+        console.log("Store in place booking:", current.id)
 
-        if (store.name === '' || store.address === '' || store.email === ''
-            || store.number === '' || store.startDate === '' || store.endDate === '') {
-            setCheck(true)
+        if (store.name !== '' || store.address !== '' || store.email !== ''
+            || store.number !== '' || store.startDate !== '' || store.endDate !== '') {
 
-        }
-        else {
-            if (id !== '' || store.name !== '' || store.address !== '' || store.email !== ''
-                || store.number !== '' || store.startDate !== '' || store.endDate !== '') {
+       
+            form.append("customerName", store.name)
+            form.append("contact", store.number)
+            form.append("email", store.email)
+            form.append("address", store.address)
+            form.append("startDate", store.startDate)
+            form.append("endDate", store.endDate)
+            form.append("serviceId", current.id)
 
-                form.append("id", id)
-                form.append(" customerName", store.name.trim())
-                form.append("email", store.email.trim())
-                form.append("contact", store.number.trim())
-                form.append("address", store.address.trim())
-                form.append("serviceName", current.name.trim())
-                form.append("startDate", store.startDate.trim())
-                form.append("endDate", store.endDate.trim())
-                console.log(form)
-                for (let pair of form.entries()) {
-                    console.log(pair[0] + ': ' + pair[1]);
-                }
+            console.log(form)
+            for (let pair of form.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
             }
+
+            const formDataObject = Object.fromEntries(form.entries())
+
+            fetch(`${beurl}place-booking`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(formDataObject)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success === true) {
+                        alert(data.message)
+                        window.location.reload()
+                    }
+                    else {
+                        console.log("All details")
+                        alert(data.message)
+                    }
+                })
+                .catch(err => {
+                    console.log("Error", err)
+                    alert("Trouble in connecting to the Server !!")
+                })
+
         }
 
     }
+    if (current === null) {
+        return <Loading />
+    }
+
     return (
         <div className='user_bg'>
             <header className='container-fluid text-center bg-white home d-flex justify-content-center align-content-center'>
@@ -97,7 +137,7 @@ export default function Event() {
                 <div className="m-5">
                     <div className="row align-items-center">
                         <div className="col-12 col-md-6 text-center">
-                            <img src={current.coverPhoto} className="img-fluid" alt="Services" />
+                            <img src={`${beurl}${current.coverPhoto}`} className="img-fluid" alt="Services" />
                         </div>
                         <div className="col-12 col-md-6 text-center mt-4">
                             <p className="content ">
