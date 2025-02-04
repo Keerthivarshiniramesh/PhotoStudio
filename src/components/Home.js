@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import order from '../assets/order.png'
 import book from '../assets/bookings.png'
 import product from '../assets/products.jpg'
 import service from '../assets/services.png'
 import logo from '../assets/ADS_bg_Logo.png'
 import { useNavigate } from 'react-router-dom'
+import { Contextuse } from '../Providerr'
 export default function Home() {
 
     let use = useNavigate()
-
+    let { setAuth } = useContext(Contextuse)
     let beurl = process.env.REACT_APP_beUrl
     let Logout = () => {
         fetch(`${beurl}logout`, {
@@ -20,6 +21,7 @@ export default function Home() {
                 alert(data.message)
                 if (data.success === true) {
                     use('/auth')
+                    // setAuth(false)
                 }
             })
             .catch(err => {
@@ -34,18 +36,19 @@ export default function Home() {
             method: "GET",
             credentials: "include"
         })
-            .then(res => res.json())
-            .then(data => {
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.success === true) {
+                console.log("Current User")
                 alert(data.message)
-                if (data.success === true) {
-                    console.log("Current User")
-                }
-            })
-            .catch(err => {
-                console.log("Error in Logout ", err)
-                alert("Trouble in connecting to the Server !!!")
             }
-            )
+        })
+        .catch(err => {
+            console.log("Error in Logout ", err)
+            alert("Trouble in connecting to the Server !!!")
+        }
+        )
     }
 
 

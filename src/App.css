@@ -33,11 +33,6 @@
   overflow: hidden;
 }
 
-.downloads {
-  font-size: 1.5 rem;
-  font-weight: bold !important;
-}
-
 header {
   font-family: "Playfair Display", serif;
   font-optical-sizing: auto;

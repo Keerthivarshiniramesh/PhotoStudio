@@ -5,8 +5,8 @@ export const Contextuse = createContext()
 
 export default function Providerr(props) {
 
-    let [isadmin, setAdmin] = useState(true)
-    // let[isAuth ,setAuth] =useState(false)
+    let [isadmin, setAdmin] = useState(null)
+    let [isAuth, setAuth] = useState(true)
 
     const beurl = process.env.REACT_APP_beUrl
 
@@ -33,6 +33,33 @@ export default function Providerr(props) {
                 console.log("Eroor in fetching products:", err)
                 alert("Trouble in connecting to the Server!")
             })
+
+        fetch(`${beurl}fetch-authuser`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.success === true) {
+                    if (data.user.role === 'admin') {
+                        setAdmin(true)
+                        console.log("Current User:", data)
+                    }
+                    // setAdmin(false)
+
+                }
+                else {
+                    setAdmin(false)
+                    // alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log("Error in Logout ", err)
+                alert("Trouble in connecting to the Server !!!")
+            }
+            )
+
     }, [])
 
     useEffect(() => {
@@ -226,10 +253,10 @@ export default function Providerr(props) {
     // ])
 
 
-    // setAdmin, isAuth, setAuth,
+    // 
 
 
-    let data = { isadmin, products, setProducts, services, setServices, orders, setOrder, bookings, setBookings }
+    let data = { setAdmin, isAuth, setAuth, isadmin, products, setProducts, services, setServices, orders, setOrder, bookings, setBookings }
     return (
         <Contextuse.Provider value={data}>
             {props.children}

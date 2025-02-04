@@ -4,7 +4,7 @@ import logo from '../assets/ADS_bg_Logo.png'
 import Loading from './Loading';
 export default function Service() {
 
-    let { services, setServices } = useContext(Contextuse)
+    let { services } = useContext(Contextuse)
 
     let beurl = process.env.REACT_APP_beUrl
 
@@ -92,9 +92,9 @@ export default function Service() {
         formData.append('coverPhoto', view.coverPhoto)
 
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
 
         console.log("id in edit:", view.id)
 
@@ -182,7 +182,7 @@ export default function Service() {
                     [keys]: values
                 }))
         }
-        console.log(view)
+        // console.log(view)
     }
 
     let Save = (e) => {
@@ -196,11 +196,9 @@ export default function Service() {
             form.append('isAvailable', create.isAvailable)
             form.append('coverPhoto', create.coverPhoto)
 
-
-
-            for (let pair of form.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
+            // for (let pair of form.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
 
             fetch(`${beurl}add-service`, {
                 method: "POST",
@@ -222,11 +220,19 @@ export default function Service() {
                     alert("Trouble in connecting to the Server !!")
                 }
                 )
-
-
         }
-        else {
 
+    }
+
+    let [coverphotoedit, setPhotoCoveredit] = useState(false)
+    let [coverphotoUrl, setPhotoCoverUrl] = useState('')
+    let PhotoChange = (e, keys) => {
+        let file = e.target.files[0]
+        if (keys === 'coverPhoto') {
+            setView({ ...view, [keys]: file })
+            const convertedURL = URL.createObjectURL(file)
+            setPhotoCoverUrl(convertedURL)
+            setPhotoCoveredit(true)
         }
     }
 
@@ -348,8 +354,8 @@ export default function Service() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={`${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
-                                <input id='coverPhoto' hidden type='file' className='form-control' onChange={(e) => setView({ ...view, coverPhoto: e.target.files[0] })} />
+                                <label htmlFor='coverPhoto' className="form-label"><h6>CoverPhoto :</h6><img src={coverphotoedit === true ? coverphotoUrl : `${beurl}${view.coverPhoto}`} alt='Cover Photo' style={{ width: '100px', height: '100px' }} /></label>
+                                <input id='coverPhoto' hidden type='file' className='form-control' onChange={(e) => PhotoChange(e, 'coverPhoto')} />
                             </div>
 
                             <div className="mb-3">

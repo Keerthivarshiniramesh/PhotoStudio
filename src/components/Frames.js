@@ -11,7 +11,7 @@ export default function Frames() {
 
     let { id } = useParams()
     let [current, setCurrent] = useState(null)
-    console.log("id is", id)
+    // console.log("id is", id)
     useEffect(() => {
 
         fetch(`${beurl}fetch-product/${id}`, {
@@ -60,15 +60,13 @@ export default function Frames() {
 
     // }, [])
 
-    console.log("Product", products)
+    // console.log("Product", products)
 
 
 
     let [upload, setUpload] = useState(false)
     let [photoUrl, setPhotoUrl] = useState('')
     let [check, setCheck] = useState(false)
-
-
 
 
     let photoRef = useRef(null)
@@ -84,7 +82,7 @@ export default function Frames() {
         quantity: '',
 
     })
-    console.log(products)
+    // console.log(products)
 
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,7 +90,7 @@ export default function Frames() {
     useEffect(() => {
         if (current && current.availableSizes.length > 0) {
 
-            console.log("current.availableSizes:", current.availableSizes)
+            // console.log("current.availableSizes:", current.availableSizes)
 
             const selectedSize = {
                 height: current.availableSizes[0].height,
@@ -118,7 +116,7 @@ export default function Frames() {
         if (keys === 'number') {
             if (phoneReg.test(values)) {
                 setCheck(false)
-                console.log("true")
+                // console.log("true")
             }
             else {
                 setCheck(true)
@@ -154,7 +152,7 @@ export default function Frames() {
         }
 
     }
-    // console.log("Image", user_photo)
+
     let form = new FormData()
     let Order = (e) => {
         e.preventDefault()
@@ -176,17 +174,16 @@ export default function Frames() {
                 form.append("productId", products[currentIndex].id)
                 form.append("height", size.height)
                 form.append("width", size.width)
-                console.log("Type of size", typeof size)
+                // console.log("Type of size", typeof size)
                 form.append("quantity", store.quantity)
                 // console.log(typeof store.quantity)
                 form.append("totalAmount", current.price)
                 form.append("image", store.photo)
 
-
                 console.log(form)
-                for (let pair of form.entries()) {
-                    console.log("Forms :", pair[0] + ': ' + pair[1]);
-                }
+                // for (let pair of form.entries()) {
+                //     console.log("Forms :", pair[0] + ': ' + pair[1]);
+                // }
 
                 fetch(`${beurl}place-order`, {
                     method: "POST",
@@ -200,7 +197,6 @@ export default function Frames() {
                             window.location.reload()
                         }
                         else {
-                            console.log("All details")
                             alert(data.message)
                         }
                     })
@@ -223,7 +219,7 @@ export default function Frames() {
             height: height,
             width: width
         }
-        console.log('selectedSize:', selectedSize)
+        // console.log('selectedSize:', selectedSize)
 
         setSize(selectedSize)
     }

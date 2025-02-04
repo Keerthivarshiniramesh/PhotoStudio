@@ -51,7 +51,7 @@ export default function Event() {
         if (keys === 'number') {
             if (phoneReg.test(values)) {
                 setCheck(false)
-                console.log("true")
+                // console.log("true")
             }
             else {
                 setCheck(true)
@@ -83,9 +83,9 @@ export default function Event() {
             form.append("serviceId", current.id)
 
             console.log(form)
-            for (let pair of form.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
+            // for (let pair of form.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
 
             const formDataObject = Object.fromEntries(form.entries())
 
@@ -105,7 +105,7 @@ export default function Event() {
                         window.location.reload()
                     }
                     else {
-                        console.log("All details")
+                        // console.log("All details")
                         alert(data.message)
                     }
                 })

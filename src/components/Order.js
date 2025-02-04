@@ -150,23 +150,23 @@ export default function Order() {
         fetch(imageUrl)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok')
                 }
-                return response.blob();
+                return response.blob()
             })
             .then(blob => {
-                const blobUrl = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = 'image.png'; // Set the filename
-                document.body.appendChild(link); // Append link to the DOM
-                link.click(); // Programmatically click the link to trigger download
-                document.body.removeChild(link); // Clean up
-                URL.revokeObjectURL(blobUrl); // Revoke the object URL
+                const blobUrl = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = blobUrl
+                link.download = 'image.png' // Set the filename
+                document.body.appendChild(link) // Append link to the DOM
+                link.click() // Programmatically click the link to trigger download
+                document.body.removeChild(link) // Clean up
+                URL.revokeObjectURL(blobUrl) // Revoke the object URL
             })
             .catch(error => {
-                console.error('Error downloading the image:', error);
-            });
+                console.error('Error downloading the image:', error)
+            })
     };
 
 

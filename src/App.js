@@ -15,12 +15,14 @@ import UserProducts from './components/UserProducts';
 import Denied from './components/Denied';
 import Frames from './components/Frames';
 import Event from './components/Event';
+import Loading from './components/Loading';
 
 
 function App() {
-  let { isadmin } = useContext(Contextuse)
+  let { isadmin, isAuth } = useContext(Contextuse)
   console.log(isadmin)
-  const isAuth = true
+  console.log(isAuth)
+  // const isAuth = true
 
   // const BeUrl = process.env.REACT_APP_beUrl
 
@@ -61,6 +63,11 @@ function App() {
   //   })
   // }
 
+
+  if (isadmin === null) {
+    return <Loading/>
+  }
+
   return (
     <Routes>
       <Route path='/auth' element={<Login />}></Route>
@@ -75,6 +82,7 @@ function App() {
           (isadmin === true ? <Home /> : <Denied />) : <Login />
       } />
 
+      {/* {console.log("Log in", isadmin)} */}
 
       <Route path='/' element={<HomePage />}></Route>
       <Route path='/userservice' element={<UserService />}></Route>

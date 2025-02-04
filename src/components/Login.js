@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Contextuse } from '../Providerr'
+import Denied from './Denied'
 
 
 export default function Login() {
@@ -7,18 +9,18 @@ export default function Login() {
 
     let [valid, setValid] = useState({ email: '', pwd: '' })
     let [check, setCheck] = useState(false)
-
+    let { setAdmin } = useContext(Contextuse)
     let use = useNavigate()
 
     let Validation = (event, keys) => {
-      
+
         let values = event.target.value
         setValid(prev => ({
             ...prev,
             [keys]: values
 
         }))
-     
+
     }
 
     let Submits = (e) => {
@@ -42,11 +44,14 @@ export default function Login() {
                 .then(data => {
                     if (data.success === true) {
                         alert(data.message)
-                        use('/home')
+                        // use('/home')
+                        use('/dashboard')
+
                     }
                     else {
                         // alert(data.message)
                         setCheck(true)
+
                     }
                 })
                 .catch(err => {
@@ -68,7 +73,7 @@ export default function Login() {
                 <div className="container form1 mx-auto p-4" style={{ maxWidth: '400px' }}>
                     <h3 className="p-3 text-primary">Login</h3>
                     <form>
-                        <input type="email" placeholder="Email" className="form-control p-3 mb-3" value={valid.email} onChange={(e) => Validation(e, "email")}/>
+                        <input type="email" placeholder="Email" className="form-control p-3 mb-3" value={valid.email} onChange={(e) => Validation(e, "email")} />
 
                         <input type="text" placeholder="Password" className="form-control p-3 mb-3" value={valid.pwd} onChange={(e) => Validation(e, "pwd")} />
 
@@ -78,7 +83,7 @@ export default function Login() {
 
                         <button className="btn btn-primary mt-4 w-100" onClick={(e) => Submits(e)}> Login</button>
                     </form>
-                    
+
                 </div>
             </main>
         </div>

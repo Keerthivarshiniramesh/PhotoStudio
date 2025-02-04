@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 export default function Product() {
 
-    let { products, setProducts } = useContext(Contextuse)
+    let { products } = useContext(Contextuse)
 
     let beurl = process.env.REACT_APP_beUrl
 
@@ -33,10 +33,10 @@ export default function Product() {
             tempCreate.availableSizes = tempSize
             return tempCreate
         })
-        console.log("Create after updation:", create)
+        // console.log("Create after updation:", create)
     }
 
-    console.log("Create available sizes:", create.availableSizes)
+    // console.log("Create available sizes:", create.availableSizes)
 
     let [cancel, setCancel] = useState(false)
     let [list, setlist] = useState(false)
@@ -62,7 +62,7 @@ export default function Product() {
         let heights = Number(heightRef.current.value)
         let widths = Number(widthRef.current.value)
 
-        console.log("h w:", typeof heights, widths)
+        // console.log("h w:", typeof heights, widths)
 
         setCreate((prev) => ({
             ...prev,
@@ -101,10 +101,10 @@ export default function Product() {
                     [keys]: values
                 }))
         }
-        console.log(create)
+        // console.log(create)
     }
 
-    console.log(products)
+    // console.log(products)
 
 
 
@@ -119,10 +119,11 @@ export default function Product() {
             forms.append('isAvailable', create.isAvailable)
             forms.append('framePhoto', create.framePhoto)
             forms.append('coverPhoto', create.coverPhoto)
-            console.log("Forms :", forms)
-            for (let pair of forms.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
+
+            // console.log("Forms :", forms)
+            // for (let pair of forms.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
             fetch(`${beurl}add-product`, {
                 method: "POST",
                 // headers:
@@ -165,7 +166,7 @@ export default function Product() {
 
         const temp = [...view.availableSizes];
         temp[i] = { ...temp[i], [key]: values };
-        console.log(typeof values)
+        // console.log(typeof values)
         setView((prevState) => ({
             ...prevState,
             availableSizes: temp,
@@ -178,17 +179,17 @@ export default function Product() {
         e.preventDefault()
         formData.append('name', view.name)
         formData.append('availableSizes', JSON.stringify(view.availableSizes))
-        console.log("Available Sizes in update", JSON.stringify(view.availableSizes))
+        // console.log("Available Sizes in update", JSON.stringify(view.availableSizes))
         formData.append('price', view.price)
         formData.append('isAvailable', view.isAvailable)
         formData.append('framePhoto', view.framePhoto)
         formData.append('coverPhoto', view.coverPhoto)
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
 
-        console.log("id in edit:", view.id)
+        // console.log("id in edit:", view.id)
 
         fetch(`${beurl}update-product/${view.id}`, {
             method: "POST",
@@ -293,6 +294,7 @@ export default function Product() {
     let [photoUrl, setPhotoUrl] = useState('')
     let [coverphotoedit, setPhotoCoveredit] = useState(false)
     let [coverphotoUrl, setPhotoCoverUrl] = useState('')
+
     let PhotoChange = (e, keys) => {
         let file = e.target.files[0]
         if (keys === 'framePhoto') {
@@ -434,7 +436,7 @@ export default function Product() {
                 </div>
             }
 
-            {/* {Edit products} */}
+            {/* Edit products */}
             {
                 list &&
 
