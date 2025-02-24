@@ -44,8 +44,8 @@ export default function Login() {
                 .then(data => {
                     if (data.success === true) {
                         alert(data.message)
-                        // use('/home')
-                        use('/dashboard')
+                        use('/home')
+                        // use('/dashboard')
 
                     }
                     else {
